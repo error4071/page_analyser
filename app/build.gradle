@@ -1,13 +1,10 @@
 plugins {
     id 'application'
     id 'checkstyle'
-    id "io.freefair.lombok" version "8.3"
-    id "com.github.ben-manes.versions" version "0.47.0"
-    id "com.github.johnrengelman.shadow" version "8.1.1"
-}
-
-application {
-    mainClass = 'hexlet.code.App'
+    id 'com.adarshr.test-logger' version '3.2.0'
+    id 'com.github.ben-manes.versions' version '0.42.0'
+    id 'jacoco'
+    id("io.freefair.lombok") version "8.1.0"
 }
 
 group = 'hexlet.code'
@@ -17,24 +14,64 @@ repositories {
     mavenCentral()
 }
 
+compileJava {
+    options.release = 20
+    options.encoding = 'UTF-8'
+}
+
+application {
+    mainClass = 'hexlet.code.App'
+}
+
 dependencies {
-    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.7'
+    implementation("com.konghq:unirest-java:3.11.09")
 
-    implementation 'com.h2database:h2:2.2.222'
-    implementation 'com.zaxxer:HikariCP:5.0.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-    implementation 'org.apache.commons:commons-text:1.10.0'
-    implementation 'gg.jte:jte:3.1.0'
-    implementation 'org.slf4j:slf4j-simple:2.0.9'
-    implementation 'io.javalin:javalin:5.6.2'
-    implementation 'io.javalin:javalin-bundle:5.6.2'
-    implementation 'io.javalin:javalin-rendering:5.6.2'
+    implementation("org.jsoup:jsoup:1.16.1")
 
-    testImplementation("org.assertj:assertj-core:3.24.2")
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    //databases
+    implementation("com.h2database:h2:2.2.222")
+    implementation("com.zaxxer:HikariCP:5.0.1")
+    implementation('org.postgresql:postgresql:42.6.0')
+
+    implementation("io.javalin:javalin:5.6.1")
+    implementation("gg.jte:jte:3.0.1")
+    implementation("io.javalin:javalin-rendering:5.6.0")
+    implementation("io.javalin:javalin-bundle:5.6.2")
+    implementation("org.slf4j:slf4j-simple:2.0.7")
+
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.assertj:assertj-core:3.23.1")
+
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testImplementation('org.slf4j:slf4j-simple:2.0.7')
+    testImplementation("org.assertj:assertj-core:3.24.2")
+    implementation ('com.konghq:unirest-java:3.14.5')
+    testImplementation('com.squareup.okhttp3:mockwebserver:4.11.0')
+    testImplementation('org.postgresql:postgresql:42.6.0')
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
 }
 
 test {
     useJUnitPlatform()
+}
+
+testlogger {
+    showStandardStreams true
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
+checkstyle {
+    toolVersion '10.12.2'
+    configFile = rootProject.file("${rootDir}/config/checkstyle/checkstyle.xml")
 }

@@ -1,5 +1,5 @@
 setup:
-	gradle wrapper --gradle-version 8.2
+	gradle wrapper --gradle-version 8.3
 
 clean:
 	./gradlew clean
@@ -14,10 +14,7 @@ install:
 	./gradlew install
 
 start-dist:
-	APP_ENV=production ./build/install/java-javalin-blog/bin/java-javalin-blog
-
-generate-migrations:
-	./gradlew generateMigrations
+	APP_ENV=production ./build/install/app/bin/app
 
 lint:
 	./gradlew checkstyleMain checkstyleTest
@@ -32,9 +29,9 @@ check-updates:
 	./gradlew dependencyUpdates
 
 image-build:
-	docker build -t hexletcomponents/java-javalin-blog:latest .
+	docker build -t FirefullHawk/java-project-72:latest .
 
 image-push:
-	docker push hexletcomponents/java-javalin-blog:latest
+	docker push FirefullHawk/java-project-72:latest
 
 .PHONY: build
