@@ -10,14 +10,14 @@ import java.sql.Timestamp;
 @Setter
 @ToString
 
-    public  class Url {
+public class Url {
 
-        private Long id;
-        private String name;
-        private Timestamp createdAt;
+    private Long id;
+    private String name;
+    private Timestamp createdAt;
 
-        public Url(String name, String model) {
-            this.name = name;
-            this.createdAt = getCreatedAt();
-        }
+    public Url(String name, String model) {
+        this.name = name;
+        this.createdAt = getCreatedAt();
     }
+}
