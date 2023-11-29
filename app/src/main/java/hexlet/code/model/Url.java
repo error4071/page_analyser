@@ -16,8 +16,8 @@ public class Url {
     private String name;
     private Timestamp createdAt;
 
-    public Url(String name, String model) {
+    public Url(String name, Timestamp createdAt) {
         this.name = name;
-        this.createdAt = getCreatedAt();
+        this.createdAt = createdAt;
     }
 }
