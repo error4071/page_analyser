@@ -7,11 +7,7 @@ import hexlet.code.controllers.RootController;
 import hexlet.code.controllers.UrlController;
 import hexlet.code.utils.NamedRoutes;
 import io.javalin.Javalin;
-import io.javalin.rendering.template.JavalinJte;
-
-import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 
 public final class App {
 
