@@ -12,9 +12,12 @@ import hexlet.code.utils.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.stream.Collectors;
 
 public final class App {
 
@@ -38,18 +41,22 @@ public final class App {
 
     public static Javalin getApp() throws IOException, SQLException {
 
+        JavalinJte.init(createTemplateEngine());
+
         var hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(getDatabaseUrl());
-
-        var dataSource = new HikariDataSource(hikariConfig);
-        String sql = readResourceFile("schema.sql");
-
-        log.info(sql);
-        try (var connection = dataSource.getConnection();
-             var statement = connection.createStatement()) {
-            statement.execute(sql);
+        if (isProduction()) {
+            String username = System.getenv("JDBC_DATABASE_USERNAME");
+            hikariConfig.setUsername(username);
+            String password = System.getenv("JDBC_DATABASE_PASSWORD");
+            hikariConfig.setPassword(password);
         }
-        BaseRepository.dataSource = dataSource;
+        var dataSource = new HikariDataSource(hikariConfig);
+
+        var inputStream = App.class.getClassLoader().getResourceAsStream("schema.sql");
+        var reader = new BufferedReader(new InputStreamReader(inputStream));
+        var sql = reader.lines().collect(Collectors.joining("\n"));
+
 
         var app = Javalin.create(config -> {
             config.plugins.enableDevLogging();
@@ -61,11 +68,11 @@ public final class App {
 
         JavalinJte.init(createTemplateEngine());
 
-        app.get("/", RootController::index);
-        app.get(NamedRoutes.urlsPath(), UrlController::listUrls);
+        app.get(NamedRoutes.rootPath(), RootController::index);
+        app.get(NamedRoutes.urlsPath(), UrlController::showUrls);
         app.post(NamedRoutes.urlsPath(), UrlController::addUrl);
         app.get(NamedRoutes.urlPath("{id}"), UrlController::showUrl);
-        app.post(NamedRoutes.urlsChecksPath("{id}"), UrlController::checkUrl);
+        app.post(NamedRoutes.urlCheckPath("{id}"), UrlController::checkUrl);
 
         return app;
     }
