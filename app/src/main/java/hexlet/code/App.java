@@ -1,18 +1,25 @@
 package hexlet.code;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
 import hexlet.code.controllers.RootController;
 import hexlet.code.controllers.UrlController;
+import hexlet.code.repository.BaseRepository;
 import hexlet.code.utils.NamedRoutes;
 import io.javalin.Javalin;
+import io.javalin.rendering.template.JavalinJte;
+
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 
 public final class App {
 
     private static String getDatabaseUrl() {
-        return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:Hexlet;DB_CLOSE_DELAY=-1;");
+        return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project");
     }
 
     private static String getMode() {
@@ -29,19 +36,38 @@ public final class App {
         return Integer.valueOf(port);
     }
 
-    public static Javalin getApp() {
+    public static Javalin getApp() throws IOException, SQLException {
+
+        var hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(getDatabaseUrl());
+
+        var dataSource = new HikariDataSource(hikariConfig);
+        String sql = readResourceFile("schema.sql");
+
+        log.info(sql);
+        try (var connection = dataSource.getConnection();
+             var statement = connection.createStatement()) {
+            statement.execute(sql);
+        }
+        BaseRepository.dataSource = dataSource;
 
         var app = Javalin.create(config -> {
             config.plugins.enableDevLogging();
         });
 
-        app.get("/", ctx -> ctx.result("Hello World!"));
-        return app;
-    }
+        app.before(ctx -> {
+            ctx.contentType("text/html; charset=utf-8");
+        });
 
-    public static void main(String[] args) {
-        Javalin app = getApp();
-        app.start(getPort());
+        JavalinJte.init(createTemplateEngine());
+
+        app.get("/", RootController::index);
+        app.get(NamedRoutes.urlsPath(), UrlController::listUrls);
+        app.post(NamedRoutes.urlsPath(), UrlController::addUrl);
+        app.get(NamedRoutes.urlPath("{id}"), UrlController::showUrl);
+        app.post(NamedRoutes.urlsChecksPath("{id}"), UrlController::checkUrl);
+
+        return app;
     }
 
     private static TemplateEngine createTemplateEngine() {
@@ -62,5 +88,11 @@ public final class App {
         String specialSymbols = "://";
 
         return protocol + specialSymbols + host + port;
+    }
+
+
+    public static void main(String[] args) throws SQLException, IOException {
+        Javalin app = getApp();
+        app.start(getPort());
     }
 }
