@@ -26,7 +26,7 @@ application {
 dependencies {
     implementation("com.konghq:unirest-java:3.11.09")
 
-    implementation("org.jsoup:jsoup:1.16.1")
+    implementation("org.jsoup:jsoup:1.17.1")
 
     //databases
     implementation("com.h2database:h2:2.2.222")
@@ -51,6 +51,7 @@ dependencies {
     implementation ('com.konghq:unirest-java:3.14.5')
     testImplementation('com.squareup.okhttp3:mockwebserver:4.11.0')
     testImplementation('org.postgresql:postgresql:42.6.0')
+
 }
 
 tasks.withType(JavaCompile) {

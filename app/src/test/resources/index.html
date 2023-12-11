@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html>
 
@@ -42,7 +45,8 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-floating">
-                                    <input id="url-input" name="url">
+                                    <input id="url-input" autofocus type="text" required name="url" aria-label="url"
+                                           class="form-control w-100" placeholder="ссылка" autocomplete="off">
                                     <label for="url-input">Ссылка</label>
                                 </div>
                             </div>
@@ -51,7 +55,7 @@
                             </div>
                         </div>
                     </form>
-                    <p class="mt-2 mb-0 text-muted">Пример: https://www.soma-domain.com</p>
+                    <p class="mt-2 mb-0 text-muted">Пример: https://www.example.com</p>
                 </div>
             </div>
         </div>
@@ -62,9 +66,8 @@
 <footer class="footer border-top py-3 mt-5 bg-light">
     <div class="container-xl">
         <div class="text-center">
-           <p> created by
-               error4071
-            </p>
+            created by
+            <a href="https://ru.hexlet.io" target="_blank">Hexlet</a>
         </div>
     </div>
 </footer>

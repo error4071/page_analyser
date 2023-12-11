@@ -7,14 +7,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Getter
 
-    public class   UrlsPage extends BasePage {
+    public class UrlsPage extends BasePage {
         private List<Url> urls;
         private long pageNumber;
         private List<UrlCheck> lastCheck;
         private String conditionNext;
         private String conditionBack;
+
+    public UrlsPage(List<Url> urls, Map<Long, UrlCheck> urlChecks) {
+        super();
     }
+}

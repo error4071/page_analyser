@@ -5,6 +5,7 @@ import hexlet.code.model.Url;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ public class UrlRepository extends BaseRepository {
 
     public static void save(Url url) throws SQLException {
         String sql = "INSERT INTO urls (name, created_at) VALUES (?, ?)";
+        var datetime = new Timestamp(System.currentTimeMillis());
         try (var conn = dataSource.getConnection();
              var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -24,6 +26,7 @@ public class UrlRepository extends BaseRepository {
 
             if (generatedKeys.next()) {
                 url.setId(generatedKeys.getLong(1));
+                url.setCreatedAt(datetime);
             } else {
                 throw new SQLException("DB have not returned an id after saving an entity");
             }

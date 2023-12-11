@@ -16,6 +16,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,11 @@ public final class App {
 
     private static boolean isProduction() {
         return getMode().equals("production");
+    }
+
+    private static String readResourceFile(String fileName) throws IOException {
+        var path = Paths.get("src", "main", "resources", fileName);
+        return Files.readString(path);
     }
 
     private static int getPort() {
@@ -53,9 +60,14 @@ public final class App {
         }
         var dataSource = new HikariDataSource(hikariConfig);
 
-        var inputStream = App.class.getClassLoader().getResourceAsStream("schema.sql");
-        var reader = new BufferedReader(new InputStreamReader(inputStream));
-        var sql = reader.lines().collect(Collectors.joining("\n"));
+        var schemaSql = readResourceFile("schema.sql");
+
+        try (var connection = dataSource.getConnection();
+             var statement = connection.createStatement()) {
+            statement.execute(schemaSql);
+        }
+
+        BaseRepository.dataSource = dataSource;
 
 
         var app = Javalin.create(config -> {
@@ -87,16 +99,6 @@ public final class App {
         app.get(NamedRoutes.rootPath(), RootController::index);
         app.post(NamedRoutes.urlsPath(), UrlController::addUrl);
     }
-
-    public static String urlBuild(URL url) {
-        String protocol = url.getProtocol() == null ? "" : url.getProtocol();
-        String host = url.getHost();
-        String port = url.getPort() == -1 ? "" : ":" + url.getPort();
-        String specialSymbols = "://";
-
-        return protocol + specialSymbols + host + port;
-    }
-
 
     public static void main(String[] args) throws SQLException, IOException {
         Javalin app = getApp();

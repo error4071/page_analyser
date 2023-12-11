@@ -5,10 +5,15 @@ import hexlet.code.repository.UrlRepository;
 import io.javalin.Javalin;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.testtools.JavalinTest;
+import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -19,6 +24,27 @@ public class AppTest {
     private static MockWebServer mockWebServer;
 
     private static Javalin app;
+
+    private static Path getAbsolutePath(String filePath) {
+        return Paths.get(filePath).toAbsolutePath().normalize();
+    }
+
+    private static String getDataFromFile(Path absoluteFilePath) throws Exception {
+        return Files.readString(absoluteFilePath).trim();
+    }
+
+    @BeforeAll
+    public static void beforeAll() throws Exception {
+        mockWebServer = new MockWebServer();
+
+        String filePath = "./src/test/resources/index.html";
+        String checkFile = getDataFromFile(getAbsolutePath(filePath));
+
+        MockResponse mockedResponse = new MockResponse()
+                .setBody(checkFile);
+        mockWebServer.enqueue(mockedResponse);
+        mockWebServer.start();
+    }
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -64,7 +90,7 @@ public class AppTest {
             var requestBody = "url=http://www.some-domain.com";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
-            var url = UrlRepository.find(1L).orElseThrow(() -> new NotFoundResponse("Url not found"));
+            var url = UrlRepository.find(mockWebServer.getBodyLimit()).orElseThrow(() -> new NotFoundResponse("Url not found"));
 
             String urlId = String.valueOf(url.getId());
             String urlName = url.getName();
