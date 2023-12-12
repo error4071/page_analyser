@@ -64,7 +64,7 @@ public class AppTest {
     @Test
     public void testPageUrl() {
         JavalinTest.test(app, (server, client) -> {
-            var url = new Url( "url=http://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
+            var url = new Url("url=http://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
             UrlRepository.save(url);
 
             var response = client.get("/urls");
@@ -75,7 +75,7 @@ public class AppTest {
 
     @Test
     public void testPageUrls() throws Exception {
-        var url = new Url( "url=http://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
+        var url = new Url("url=http://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
         UrlRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
@@ -91,7 +91,8 @@ public class AppTest {
             var requestBody = "url=http://www.some-domain.com";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
-            var url = UrlRepository.find(mockWebServer.getBodyLimit()).orElseThrow(() -> new NotFoundResponse("Url not found"));
+            var url = UrlRepository.find(mockWebServer.getBodyLimit())
+                    .orElseThrow(() -> new NotFoundResponse("Url not found"));
 
             String urlId = String.valueOf(url.getId());
             String urlName = url.getName();
