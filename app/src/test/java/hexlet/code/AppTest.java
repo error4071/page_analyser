@@ -41,6 +41,7 @@ public class AppTest {
         String checkFile = getDataFromFile(getAbsolutePath(filePath));
 
         MockResponse mockedResponse = new MockResponse()
+                .setResponseCode(200)
                 .setBody(checkFile);
         mockWebServer.enqueue(mockedResponse);
         mockWebServer.start();
