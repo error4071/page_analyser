@@ -92,7 +92,7 @@ public class UrlController {
         var id = ctx.pathParamAsClass("id", Long.class)
                 .get();
         var pageNumber = ctx.queryParamAsClass("page", long.class)
-                .getOrDefault(1L);
+                .getOrDefault(id);
         var url = UrlRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Url not found"));
 
