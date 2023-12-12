@@ -75,6 +75,9 @@ public class AppTest {
 
     @Test
     public void testPageUrls() throws Exception {
+        var url = new Url( "url=http://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
+        UrlRepository.save(url);
+
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
