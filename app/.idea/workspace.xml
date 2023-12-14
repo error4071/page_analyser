@@ -76,7 +76,7 @@
       <recent name="\\wsl$\Ubuntu-20.04\home\error4071\java-project-72\app\src\main\java\hexlet\code\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.AppTest">
+  <component name="RunManager" selected="Gradle.AppTest.testCreateUrl">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="hexlet.code.App" />
       <module name="app.main" />
@@ -104,6 +104,30 @@
             <option value=":test" />
             <option value="--tests" />
             <option value="&quot;hexlet.code.AppTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="AppTest.testCreateUrl" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;hexlet.code.AppTest.testCreateUrl&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -162,6 +186,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.AppTest.testCreateUrl" />
         <item itemvalue="Gradle.AppTest" />
         <item itemvalue="Gradle.AppTest.testMainPage" />
         <item itemvalue="Gradle.app [run]" />
@@ -207,6 +232,9 @@
       <workItem from="1702313950788" duration="8935000" />
       <workItem from="1702399557947" duration="1875000" />
       <workItem from="1702403246050" duration="149000" />
+      <workItem from="1702403404831" duration="6624000" />
+      <workItem from="1702488220447" duration="838000" />
+      <workItem from="1702490146730" duration="1499000" />
     </task>
     <servers />
   </component>

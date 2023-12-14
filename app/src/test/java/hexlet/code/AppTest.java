@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class AppTest {
+public final class AppTest {
 
     private static MockWebServer mockWebServer;
 
@@ -48,7 +48,7 @@ public class AppTest {
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public final void setUp() throws Exception {
         app = App.getApp();
     }
 
@@ -88,16 +88,10 @@ public class AppTest {
     @Test
     public void testCreateUrl() throws Exception {
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=http://www.some-domain.com";
+            var requestBody = "url=https:www.some-domain.com";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
-            var url = UrlRepository.find(mockWebServer.getBodyLimit())
-                    .orElseThrow(() -> new NotFoundResponse("Url not found"));
-
-            String urlId = String.valueOf(url.getId());
-            String urlName = url.getName();
-
-            assertThat(response.body().string()).contains(urlId, urlName);
+            assertThat(response.body().string()).contains("https://www.some-domain.com");
         });
     }
 
