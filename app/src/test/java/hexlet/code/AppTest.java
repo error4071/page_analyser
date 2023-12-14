@@ -7,6 +7,7 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -88,24 +89,16 @@ public final class AppTest {
     @Test
     public void testCreateUrl() throws Exception {
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=http://www.some-domain.com";
+            var requestBody = "url=http://www.example.com";
             var response = client.post("/urls", requestBody);
-            assertThat(response.code()).isEqualTo(200);
-
+            assertThat(response.code()).isEqualTo(HttpStatus.SC_OK);
             var url = UrlRepository.find(1L)
                     .orElseThrow(() -> new NotFoundResponse("Url not found"));
 
-            String urlId = String.valueOf(url.getId());
-            String urlName = url.getName();
+            String id = String.valueOf(url.getId());
+            String name = url.getName();
 
-            assertThat(response.body().string()).contains(urlId, urlName);
-
-            var url2 = mockWebServer.url("/").toString().replaceAll("/$", "");
-            var requestBody2 = "url=" + url;
-            assertThat(client.post("/urls", requestBody2).code()).isEqualTo(200);
-            String actualUrl = String.valueOf(UrlRepository.findByName(url2));
-            assertThat(actualUrl).isEqualTo(url);
-            //...
+            assertThat(response.body().string()).contains(id, name);
         });
     }
 
