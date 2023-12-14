@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public final class AppTest {
+public final class UrlTest {
 
     private static MockWebServer mockWebServer;
 
