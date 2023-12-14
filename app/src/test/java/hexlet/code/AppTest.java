@@ -49,12 +49,12 @@ public final class AppTest {
     }
 
     @BeforeEach
-    public final void setUp() throws Exception {
+    public void setUp() throws Exception {
         app = App.getApp();
     }
 
     @Test
-    void testMainPage() throws Exception {
+    public void testMainPage() throws Exception {
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/");
