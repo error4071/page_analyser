@@ -29,9 +29,9 @@ check-updates:
 	./gradlew dependencyUpdates
 
 image-build:
-	docker build -t FirefullHawk/java-project-72:latest .
+	docker build -t error4071/java-project-72:latest .
 
 image-push:
-	docker push FirefullHawk/java-project-72:latest
+	docker push error4071/java-project-72:latest
 
 .PHONY: build
