@@ -12,34 +12,40 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public final class UrlTest {
+public final class AppTest {
 
     private static MockWebServer mockWebServer;
 
     private static Javalin app;
 
-    private static Path getAbsolutePath(String filePath) {
-        return Paths.get(filePath).toAbsolutePath().normalize();
-    }
-
-    private static String getDataFromFile(Path absoluteFilePath) throws Exception {
-        return Files.readString(absoluteFilePath).trim();
+    private static String readResourceFile(String fileName) throws IOException {
+        var inputStream = App.class.getClassLoader()
+                .getResourceAsStream(fileName);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            return reader.lines()
+                    .collect(Collectors.joining("\n"));
+        }
     }
 
     @BeforeAll
     public static void beforeAll() throws Exception {
         mockWebServer = new MockWebServer();
 
-        String filePath = "./src/test/resources/index.html";
-        String checkFile = getDataFromFile(getAbsolutePath(filePath));
+        String fileName = "./src/test/resources/index.html";
+        String checkFile = readResourceFile(fileName);
 
         MockResponse mockedResponse = new MockResponse()
                 .setResponseCode(200)
