@@ -42,14 +42,11 @@ public final class AppTest {
 
     @BeforeAll
     public static void beforeAll() throws Exception {
+
         mockWebServer = new MockWebServer();
-
-        String fileName = "./src/test/resources/index.html";
-        String checkFile = readResourceFile(fileName);
-
         MockResponse mockedResponse = new MockResponse()
                 .setResponseCode(200)
-                .setBody(checkFile);
+                .setBody(readResourceFile("index.html"));
         mockWebServer.enqueue(mockedResponse);
         mockWebServer.start();
     }
