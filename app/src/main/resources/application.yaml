@@ -3,7 +3,7 @@ datasource:
   development:
     username: hexlet_n7nw_user
     password: MnB5HkrZmKxnwfKrAC1s2uZUVFLYO6zw
-    url: "postgres://hexlet_n7nw_user:MnB5HkrZmKxnwfKrAC1s2uZUVFLYO6zw@dpg-cl7mohivokcc73anqfag-a.oregon-postgres.render.com/hexlet_n7nw"
+    url: "postgres://hexlet_n7nw_user:MnB5HkrZmKxnwfKrAC1s2uZUVFLYO6zw@dpg-cl7mohivokcc73anqfag-a/hexlet_n7nw"
   production:
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}

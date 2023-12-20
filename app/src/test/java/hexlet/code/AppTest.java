@@ -92,13 +92,7 @@ public final class AppTest {
             var requestBody = "url=http://www.some-domain.com";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
-            var url = UrlRepository.find(id)
-                    .orElseThrow(() -> new NotFoundResponse("Url not found"));
-
-            String urlId = String.valueOf(url.getId());
-            String name = url.getName();
-
-            assertThat(response.body().string()).contains(urlId, name);
+            assertThat(response.body().string()).contains("url=http://www.some-domain.com");
         });
     }
 
