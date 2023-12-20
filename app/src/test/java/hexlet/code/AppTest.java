@@ -87,18 +87,18 @@ public final class AppTest {
     }
 
     @Test
-    public void testCreateUrl() throws Exception {
+    public void testCreateUrl(Long id) throws Exception {
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=http://www.example.com";
+            var requestBody = "url=http://www.some-domain.com";
             var response = client.post("/urls", requestBody);
-            assertThat(response.code()).isEqualTo(HttpStatus.SC_OK);
-            var url = UrlRepository.find(1L)
+            assertThat(response.code()).isEqualTo(200);
+            var url = UrlRepository.find(id)
                     .orElseThrow(() -> new NotFoundResponse("Url not found"));
 
-            String id = String.valueOf(url.getId());
+            String urlId = String.valueOf(url.getId());
             String name = url.getName();
 
-            assertThat(response.body().string()).contains(id, name);
+            assertThat(response.body().string()).contains(urlId, name);
         });
     }
 
