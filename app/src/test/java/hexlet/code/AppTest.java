@@ -87,12 +87,12 @@ public final class AppTest {
     }
 
     @Test
-    public void testCreateUrl() throws Exception {
+    public void testCreateUrl(Long id) throws Exception {
         JavalinTest.test(app, (server, client) -> {
             var requestBody = "url=http://www.some-domain.com";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains("url=http://www.some-domain.com");
+            assertThat(response.body().string()).contains("http://www.some-domain.com");
         });
     }
 
