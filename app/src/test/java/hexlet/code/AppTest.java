@@ -87,7 +87,7 @@ public final class AppTest {
     }
 
     @Test
-    public void testCreateUrl(Long id) throws Exception {
+    public void testCreateUrl() throws Exception {
         JavalinTest.test(app, (server, client) -> {
             var requestBody = "url=http://www.some-domain.com";
             var response = client.post("/urls", requestBody);
