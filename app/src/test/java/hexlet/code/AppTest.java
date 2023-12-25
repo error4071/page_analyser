@@ -70,7 +70,8 @@ public final class AppTest {
 
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains("http://www.some-domain.com");
+            assertThat(response.body()
+                    .string()).contains("http://www.some-domain.com");
         });
     }
 
@@ -82,7 +83,8 @@ public final class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains("http://www.some-domain.com");
+            assertThat(response.body()
+                    .string()).contains("http://www.some-domain.com");
         });
     }
 
@@ -92,7 +94,8 @@ public final class AppTest {
             var requestBody = "url=http://www.some-domain.com";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains("http://www.some-domain.com");
+            assertThat(response.body()
+                    .string()).contains("http://www.some-domain.com");
         });
     }
 
