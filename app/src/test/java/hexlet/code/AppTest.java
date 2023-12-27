@@ -28,8 +28,6 @@ public final class AppTest {
 
     private static Javalin app;
 
-    private UrlRepository urlRepository;
-
     private static String readResourceFile(String fileName) throws IOException {
         var inputStream = App.class.getClassLoader()
                 .getResourceAsStream(fileName);
@@ -108,8 +106,12 @@ public final class AppTest {
 
     @Test
     void testUrlNotFound() throws Exception {
+        Url url = new Url("https://www.some-domain.com");
+        UrlRepository.deleteById(url.getId());
+
         JavalinTest.test(app, (server, client) -> {
-            var response = client.get("/urls/999999");
+            var response = client.get("/urls/" + url.getId());
+
             assertThat(response.code()).isEqualTo(404);
         });
     }
