@@ -115,9 +115,4 @@ public class UrlRepository extends BaseRepository {
             return result;
         }
     }
-
-    public static void deleteById(Long id) throws Exception {
-        Url url = new Url();
-        UrlRepository.deleteById(url.getId());
-    }
 }

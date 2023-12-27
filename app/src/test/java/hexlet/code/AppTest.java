@@ -25,9 +25,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public final class AppTest {
 
     private static MockWebServer mockWebServer;
-
-    private UrlRepository urlRepository;
-
     private static Javalin app;
 
     private static String readResourceFile(String fileName) throws IOException {
@@ -91,7 +88,7 @@ public final class AppTest {
     }
 
     @Test
-    public void testStore() throws SQLException {
+    public void testCreate() throws SQLException {
         String inputUrl = "https://www.some-domain.com";
 
         JavalinTest.test(app, (server, client) -> {
@@ -100,7 +97,7 @@ public final class AppTest {
             assertThat(response.code()).isEqualTo(200);
         });
 
-        Url actualUrl = Optional.ofNullable(UrlRepository.findByName(inputUrl)).orElse(null);
+        Url actualUrl = UrlRepository.findByName(inputUrl);
 
         assertThat(actualUrl).isNotNull();
         assertThat(actualUrl.getName()).isEqualTo(inputUrl);
@@ -109,7 +106,7 @@ public final class AppTest {
     @Test
     void testUrlNotFound() throws Exception {
         Url url = new Url("https://www.some-domain.com");
-        urlRepository.deleteById(url.getId());
+        UrlRepository.deleteById(url.getId());
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
