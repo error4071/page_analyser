@@ -117,7 +117,7 @@ public class UrlRepository extends BaseRepository {
     }
 
     public static Optional<Object> deleteById(Long id) throws Exception {
-        var sql = "DROP INTO urls (name, created_at) VALUES (?, ?)";
+        var sql = "INSERT INTO urls (name, created_at) VALUES (?, ?)";
         try (var conn = dataSource.getConnection();
              var stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
