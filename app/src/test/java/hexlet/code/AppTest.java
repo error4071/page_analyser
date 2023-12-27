@@ -26,6 +26,8 @@ public final class AppTest {
 
     private static MockWebServer mockWebServer;
 
+    private UrlRepository urlRepository;
+
     private static Javalin app;
 
     private static String readResourceFile(String fileName) throws IOException {
@@ -107,7 +109,7 @@ public final class AppTest {
     @Test
     void testUrlNotFound() throws Exception {
         Url url = new Url("https://www.some-domain.com");
-        UrlRepository.deleteById(url.getId());
+        urlRepository.deleteById(url.getId());
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());

@@ -24,4 +24,6 @@ public class Url {
     }
     public Url(String url) {
     }
+    public Url() {
+    }
 }
