@@ -116,7 +116,7 @@ public class UrlRepository extends BaseRepository {
         }
     }
     public static void deleteById(Url url) throws Exception {
-        var sql = "DELETE INTO urls (name, created_at) VALUES (?, ?)";
+        var sql = "DELETE FROM urls (name, created_at) VALUES (?, ?)";
         var datetime = new Timestamp(System.currentTimeMillis());
         try (var conn = dataSource.getConnection();
              var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
