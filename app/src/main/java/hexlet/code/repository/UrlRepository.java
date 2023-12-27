@@ -115,4 +115,21 @@ public class UrlRepository extends BaseRepository {
             return result;
         }
     }
+    public static void deleteById(Url url) throws Exception {
+        var sql = "DELETE INTO urls (name, created_at) VALUES (?, ?)";
+        var datetime = new Timestamp(System.currentTimeMillis());
+        try (var conn = dataSource.getConnection();
+             var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, url.getName());
+            preparedStatement.setTimestamp(2, datetime);
+            preparedStatement.executeUpdate();
+            var generatedKeys = preparedStatement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                url.setId(generatedKeys.getLong(1));
+                url.setCreatedAt(datetime);
+            } else {
+                throw new SQLException("DB have not returned an id after saving an entity");
+            }
+        }
+    }
 }

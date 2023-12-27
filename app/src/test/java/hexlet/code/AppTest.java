@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -100,6 +101,18 @@ public final class AppTest {
 
         assertThat(actualUrl).isNotNull();
         assertThat(actualUrl.getName()).isEqualTo(inputUrl);
+    }
 
+    @Test
+    void testUrlNotFound() throws Exception {
+        String inputUrl = "https://www.some-domain.com";
+        Url actualUrl = UrlRepository.findByName(inputUrl);
+        UrlRepository.deleteById(actualUrl);
+
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.get("/urls/" + actualUrl);
+
+            assertThat(response.code()).isEqualTo(404);
+        });
     }
 }
