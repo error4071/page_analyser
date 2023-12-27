@@ -110,4 +110,22 @@ public class UrlRepository extends BaseRepository {
             return result;
         }
     }
+
+    public static Optional<Object> deleteById(Long id) throws Exception {
+        var sql = "DROP INTO urls (name, created_at) VALUES (?, ?)";
+        try (var conn = dataSource.getConnection();
+             var stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            var resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                var name = resultSet.getString("name");
+                var createdAt = resultSet.getTimestamp("created_at");
+                var url = new Url(name, createdAt);
+                url.setId(id);
+                return Optional.of(url);
+            }
+            return Optional.empty();
+        }
+    }
 }
+

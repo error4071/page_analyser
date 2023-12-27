@@ -7,7 +7,6 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -27,6 +27,8 @@ public final class AppTest {
     private static MockWebServer mockWebServer;
 
     private static Javalin app;
+
+    private UrlRepository urlRepository;
 
     private static String readResourceFile(String fileName) throws IOException {
         var inputStream = App.class.getClassLoader()
@@ -89,20 +91,29 @@ public final class AppTest {
     }
 
     @Test
-    public void testCreateUrl(Long id) throws Exception {
+    public void testStore() throws SQLException {
+        String inputUrl = "https://www.some-domain.com";
+
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=http://www.some-domain.com";
+            var requestBody = "url=" + inputUrl;
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body()
-                    .string()).contains("http://www.some-domain.com");
         });
+
+        Url actualUrl = UrlRepository.findByName(inputUrl);
+
+        assertThat(actualUrl).isNotNull();
+        assertThat(actualUrl.getName()).isEqualTo(inputUrl);
     }
 
     @Test
     void testUrlNotFound() throws Exception {
+        Url url = new Url("https://www.some-domain.com");
+        UrlRepository.deleteById(url.getId());
+
         JavalinTest.test(app, (server, client) -> {
-            var response = client.get("/urls/999999");
+            var response = client.get("/urls/" + url.getId());
+
             assertThat(response.code()).isEqualTo(404);
         });
     }
