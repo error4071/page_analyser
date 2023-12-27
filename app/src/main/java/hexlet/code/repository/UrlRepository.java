@@ -7,7 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.HashMap;
+
 
 public class UrlRepository extends BaseRepository {
     public static void save(Url url) throws SQLException {

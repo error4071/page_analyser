@@ -3,7 +3,6 @@ package hexlet.code;
 import hexlet.code.model.Url;
 import hexlet.code.repository.UrlRepository;
 import io.javalin.Javalin;
-import io.javalin.http.NotFoundResponse;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -107,7 +106,6 @@ public final class AppTest {
     }
 
     @Test
-    
     void testUrlNotFound() throws Exception {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/999999");
