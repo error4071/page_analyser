@@ -22,7 +22,4 @@ public class Url {
         this.name = name;
         this.createdAt = createdAt;
     }
-
-    public Url(String url) {
-    }
 }
