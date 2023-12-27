@@ -97,7 +97,7 @@ public final class AppTest {
             assertThat(response.code()).isEqualTo(200);
         });
 
-        Url actualUrl = UrlRepository.findByName(inputUrl);
+        Url actualUrl = Optional.ofNullable(UrlRepository.findByName(inputUrl)).orElse(null);
 
         assertThat(actualUrl).isNotNull();
         assertThat(actualUrl.getName()).isEqualTo(inputUrl);
