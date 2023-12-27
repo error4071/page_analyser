@@ -107,13 +107,10 @@ public final class AppTest {
     }
 
     @Test
+    
     void testUrlNotFound() throws Exception {
-        Url url = new Url("https://www.some-domain.com");
-        UrlRepository.deleteById(url.getId());
-
         JavalinTest.test(app, (server, client) -> {
-            var response = client.get("/urls/" + url.getId());
-
+            var response = client.get("/urls/999999");
             assertThat(response.code()).isEqualTo(404);
         });
     }
