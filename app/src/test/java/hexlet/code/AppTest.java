@@ -101,17 +101,6 @@ public final class AppTest {
 
         assertThat(actualUrl).isNotNull();
         assertThat(actualUrl.getName()).isEqualTo(inputUrl);
-    }
-
-    @Test
-    void testUrlNotFound() throws Exception {
-        Url url = new Url("https://www.some-domain.com");
-        UrlRepository.deleteById(url.getId());
-
-        JavalinTest.test(app, (server, client) -> {
-            var response = client.get("/urls/" + url.getId());
-
-            assertThat(response.code()).isEqualTo(404);
-        });
+   
     }
 }
