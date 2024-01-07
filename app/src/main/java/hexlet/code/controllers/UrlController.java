@@ -59,35 +59,9 @@ public class UrlController {
         Map<Long, UrlCheck> urlChecks = UrlRepository.findLatestChecks();
         UrlsPage page = new UrlsPage(urls, urlChecks);
 
-        var pageNumber = ctx.queryParamAsClass("page", long.class)
-                .getOrDefault(1L);
-        var per = 15;
-        var firstPost = (pageNumber - 1) * per;
-
-        List<Url> pagedUrls = urls.stream()
-                .skip(firstPost)
-                .limit(per)
-                .collect(Collectors.toList());
-
-        List<UrlCheck> lastCheck = new ArrayList<>();
-
-        pagedUrls.forEach(url -> {
-            try {
-                lastCheck.add(UrlRepositoryCheck.getLastCheck(url.getId()));
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        String conditionNext = UrlRepository.getEntities()
-                .size() > pageNumber * per
-                ? "active" : "disabled";
-        String conditionBack = pageNumber > 1 ? "active" : "disabled";
-
-        var pages = new UrlsPage(pagedUrls, pageNumber, lastCheck, conditionNext, conditionBack);
-        pages.setFlash(ctx.consumeSessionAttribute("flash"));
-        pages.setFlashType(ctx.consumeSessionAttribute("flash-type"));
-        ctx.render("urls/index.jte", Collections.singletonMap("page", pages));
+        page.setFlash(ctx.consumeSessionAttribute("flash"));
+        page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
+        ctx.render("urls/index.jte", Collections.singletonMap("page", page));
     }
 
     public static void showUrl(Context ctx) throws SQLException {
