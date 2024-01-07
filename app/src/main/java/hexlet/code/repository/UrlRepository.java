@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.HashMap;
 
-
 public class UrlRepository extends BaseRepository {
     public static void save(Url url) throws SQLException {
         var sql = "INSERT INTO urls (name, created_at) VALUES (?, ?)";
@@ -44,6 +43,7 @@ public class UrlRepository extends BaseRepository {
                 var createdAt = resultSet.getTimestamp("created_at");
                 var url = new Url(name, createdAt);
                 url.setId(id);
+                url.setCreatedAt(createdAt);
                 return Optional.of(url);
             }
             return Optional.empty();
@@ -85,7 +85,7 @@ public class UrlRepository extends BaseRepository {
                 var name = resultSet.getString("name");
                 var createdAt = resultSet.getTimestamp("created_at");
                 var url = new Url(name, createdAt);
-
+                url.setCreatedAt(createdAt);
                 url.setId(id);
                 result.add(url);
             }

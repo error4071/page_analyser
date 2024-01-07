@@ -14,12 +14,6 @@ import java.util.Map;
 
 public class UrlsPage extends BasePage {
     private List<Url> urls;
-    private long pageNumber;
-    private List<UrlCheck> lastCheck;
-    private String conditionNext;
-    private String conditionBack;
-
-    public UrlsPage(List<Url> urls, Map<Long, UrlCheck> urlChecks) {
-        super();
-    }
+    private Map<Long, UrlCheck> latestChecks;
 }
+
