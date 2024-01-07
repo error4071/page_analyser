@@ -30,10 +30,6 @@ public final class App {
         return System.getenv().getOrDefault("APP_ENV", "development");
     }
 
-    private static boolean isProduction() {
-        return getMode().equals("production");
-    }
-
     private static String readResourceFile(String fileName) throws IOException {
         var inputStream = App.class.getClassLoader().getResourceAsStream(fileName);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
@@ -49,27 +45,18 @@ public final class App {
 
     public static Javalin getApp() throws IOException, SQLException {
 
-        JavalinJte.init(createTemplateEngine());
-
         var hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(getDatabaseUrl());
-        if (isProduction()) {
-            String username = System.getenv("JDBC_DATABASE_USERNAME");
-            hikariConfig.setUsername(username);
-            String password = System.getenv("JDBC_DATABASE_PASSWORD");
-            hikariConfig.setPassword(password);
-        }
+
         var dataSource = new HikariDataSource(hikariConfig);
+        String sql = readResourceFile("schema.sql");
 
-        var schemaSql = readResourceFile("schema.sql");
-
+        log.info(sql);
         try (var connection = dataSource.getConnection();
              var statement = connection.createStatement()) {
-            statement.execute(schemaSql);
+            statement.execute(sql);
         }
-
         BaseRepository.dataSource = dataSource;
-
 
         var app = Javalin.create(config -> {
             config.plugins.enableDevLogging();
@@ -78,6 +65,8 @@ public final class App {
         app.before(ctx -> {
             ctx.contentType("text/html; charset=utf-8");
         });
+
+        JavalinJte.init(createTemplateEngine());
 
         JavalinJte.init(createTemplateEngine());
 
