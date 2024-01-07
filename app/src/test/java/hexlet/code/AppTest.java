@@ -61,7 +61,7 @@ public final class AppTest {
     }
 
     @Test
-    public void testPageUrl() {
+    public void testPageUrl() throws Exception {
         JavalinTest.test(app, (server, client) -> {
             var url = new Url("url=https://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
             UrlRepository.save(url);
@@ -87,7 +87,7 @@ public final class AppTest {
     }
 
     @Test
-    public void testCreate() throws SQLException {
+    public void testCreate() throws Exception {
         String inputUrl = "https://www.some-domain.com";
 
         JavalinTest.test(app, (server, client) -> {
