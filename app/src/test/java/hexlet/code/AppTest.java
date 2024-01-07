@@ -63,26 +63,26 @@ public final class AppTest {
     @Test
     public void testPageUrl() {
         JavalinTest.test(app, (server, client) -> {
-            var url = new Url("url=http://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
+            var url = new Url("url=https://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
             UrlRepository.save(url);
 
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body()
-                    .string()).contains("http://www.some-domain.com");
+                    .string()).contains("https://www.some-domain.com");
         });
     }
 
     @Test
     public void testPageUrls() throws Exception {
-        var url = new Url("url=http://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
+        var url = new Url("url=https://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
         UrlRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body()
-                    .string()).contains("http://www.some-domain.com");
+                    .string()).contains("https://www.some-domain.com");
         });
     }
 
