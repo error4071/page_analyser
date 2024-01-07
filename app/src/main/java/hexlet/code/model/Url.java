@@ -14,15 +14,11 @@ import java.sql.Timestamp;
 
 public class Url {
 
+    public String getId;
     private Long id;
     private String name;
     private Timestamp createdAt;
 
-    public Url(String name, Timestamp createdAt) {
-        this.name = name;
-        this.createdAt = createdAt;
-        this.id = id;
-    }
-    public Url(String url) {
+    public Url(String name, Timestamp createdAt){
     }
 }

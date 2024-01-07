@@ -18,10 +18,7 @@ import org.jsoup.nodes.Element;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UrlController {
@@ -167,7 +164,7 @@ public class UrlController {
                 )
                 .toLowerCase();
 
-        Url url = UrlRepository.findByName(normalizedUrl);
+        Optional<Url> url = UrlRepository.findByName(normalizedUrl);
 
         if (url != null) {
             ctx.sessionAttribute("flash", "Страница уже существует");

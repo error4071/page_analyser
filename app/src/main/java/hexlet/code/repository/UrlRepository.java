@@ -50,7 +50,7 @@ public class UrlRepository extends BaseRepository {
         }
     }
 
-    public static Url findByName(String name) throws SQLException {
+    public static Optional<Url> findByName(String name) throws SQLException {
         var sql = "SELECT * FROM urls WHERE name = ?";
         try (var conn = dataSource.getConnection();
              var stmt = conn.prepareStatement(sql)) {
@@ -61,9 +61,10 @@ public class UrlRepository extends BaseRepository {
                 var createdAt = resultSet.getTimestamp("created_at");
                 var url = new Url(name, createdAt);
                 url.setId(id);
-                return url;
+                url.setCreatedAt(createdAt);
+                return Optional.of(url);
             }
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -115,21 +116,13 @@ public class UrlRepository extends BaseRepository {
             return result;
         }
     }
-    public static void deleteById(Url url) throws Exception {
-        var sql = "DELETE FROM urls WHERE name = ?";
-        var datetime = new Timestamp(System.currentTimeMillis());
+    public static long deleteById(long id) throws Exception {
+        var sql = "DELETE FROM urls WHERE id = ?";
         try (var conn = dataSource.getConnection();
-             var preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, url.getName());
-            preparedStatement.setTimestamp(2, datetime);
-            preparedStatement.executeUpdate();
-            var generatedKeys = preparedStatement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                url.setId(generatedKeys.getLong(1));
-                url.setCreatedAt(datetime);
-            } else {
-                throw new SQLException("DB have not returned an id after saving an entity");
-            }
+             var stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
         }
+        return id;
     }
 }
