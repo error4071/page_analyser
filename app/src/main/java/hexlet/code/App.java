@@ -23,11 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public final class App {
     private static String getDatabaseUrl() {
-        return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:hexlet_project;DB_CLOSE_DELAY=-1;");
-    }
-
-    private static String getMode() {
-        return System.getenv().getOrDefault("APP_ENV", "development");
+        return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project");
     }
 
     private static String readResourceFile(String fileName) throws IOException {
@@ -82,12 +78,8 @@ public final class App {
     private static TemplateEngine createTemplateEngine() {
         ClassLoader classLoader = App.class.getClassLoader();
         ResourceCodeResolver codeResolver = new ResourceCodeResolver("jte", classLoader);
-        return TemplateEngine.create(codeResolver, ContentType.Html);
-    }
-
-    private static void addRoutes(Javalin app) {
-        app.get(NamedRoutes.rootPath(), RootController::index);
-        app.post(NamedRoutes.urlsPath(), UrlController::addUrl);
+        TemplateEngine templateEngine = TemplateEngine.create(codeResolver, ContentType.Html);
+        return templateEngine;
     }
 
     public static void main(String[] args) throws SQLException, IOException {
