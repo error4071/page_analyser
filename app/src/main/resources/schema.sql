@@ -16,5 +16,8 @@ CREATE TABLE url_checks (
                             description                   TEXT,
                             url_id                        BIGINT NOT NULL,
                             created_at                    TIMESTAMP NOT NULL,
-                            CONSTRAINT pk_url_checks    PRIMARY KEY (id)
+                            CONSTRAINT pk_url_checks PRIMARY KEY (id)
 );
+
+CREATE INDEX ix_url_check_url_id ON url_checks (url_id);
+ALTER TABLE url_checks ADD CONSTRAINT fk_url_checks_url_id FOREIGN KEY (url_id) REFERENCES urls (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
