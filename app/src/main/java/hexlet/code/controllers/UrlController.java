@@ -18,10 +18,12 @@ import org.jsoup.nodes.Element;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class UrlController {
     public static void addUrl(Context ctx) throws SQLException {
@@ -57,9 +59,35 @@ public class UrlController {
         Map<Long, UrlCheck> urlChecks = UrlRepository.findLatestChecks();
         UrlsPage page = new UrlsPage(urls, urlChecks);
 
-        page.setFlash(ctx.consumeSessionAttribute("flash"));
-        page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
-        ctx.render("urls/index.jte", Collections.singletonMap("page", page));
+        var pageNumber = ctx.queryParamAsClass("page", long.class)
+                .getOrDefault(1L);
+        var per = 15;
+        var firstPost = (pageNumber - 1) * per;
+
+        List<Url> pagedUrls = urls.stream()
+                .skip(firstPost)
+                .limit(per)
+                .collect(Collectors.toList());
+
+        List<UrlCheck> lastCheck = new ArrayList<>();
+
+        pagedUrls.forEach(url -> {
+            try {
+                lastCheck.add(UrlRepositoryCheck.getLastCheck(url.getId()));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        String conditionNext = UrlRepository.getEntities()
+                .size() > pageNumber * per
+                ? "active" : "disabled";
+        String conditionBack = pageNumber > 1 ? "active" : "disabled";
+
+        var pages = new UrlsPage(pagedUrls, pageNumber, lastCheck, conditionNext, conditionBack);
+        pages.setFlash(ctx.consumeSessionAttribute("flash"));
+        pages.setFlashType(ctx.consumeSessionAttribute("flash-type"));
+        ctx.render("urls/index.jte", Collections.singletonMap("page", pages));
     }
 
     public static void showUrl(Context ctx) throws SQLException {
