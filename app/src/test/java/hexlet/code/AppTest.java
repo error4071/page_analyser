@@ -92,7 +92,6 @@ public final class AppTest {
 
         Url actualUrl = UrlRepository.findByName(inputUrl).orElse(null);
 
-        assertThat(actualUrl).isNotNull();
         assertThat(actualUrl.getName()).isEqualTo(inputUrl);
     }
 
