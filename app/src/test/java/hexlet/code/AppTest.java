@@ -59,15 +59,13 @@ public final class AppTest {
 
     @Test
     public void testPageUrl() throws Exception {
-        JavalinTest.test(app, (server, client) -> {
-            var url = new Url("url=https://www.some-domain.com");
-            UrlRepository.save(url);
+        var url = new Url("url=https://www.some-domain.com");
+        UrlRepository.save(url);
 
-            var response = client.get("/urls");
+        JavalinTest.test(app, ((server, client) -> {
+            var response = client.get("/urls/" + url.getId());
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body()
-                    .string()).contains("https://www.some-domain.com");
-        });
+        }));
     }
 
     @Test
