@@ -104,7 +104,7 @@ public final class AppTest {
         UrlRepository.deleteById(url.getId());
 
         JavalinTest.test(app, (server, client) -> {
-            var response = client.get("/urls/" + url.getId);
+            var response = client.get("/urls/" + url.getId());
 
             assertThat(response.code()).isEqualTo(404);
         });
