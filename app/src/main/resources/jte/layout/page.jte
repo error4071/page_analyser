@@ -1,5 +1,11 @@
+@import gg.jte.Content
+@import hexlet.code.dto.BasePage
+@import hexlet.code.utils.NamedRoutes
+@param Content content
+@param BasePage page = null
+
 <!DOCTYPE html>
-<html>
+<html lang="">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
