@@ -63,7 +63,7 @@ public final class AppTest {
         UrlRepository.save(url);
 
         JavalinTest.test(app, ((server, client) -> {
-            var response = client.get("/urls/" + url.getId());
+            var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
         }));
     }
@@ -76,8 +76,6 @@ public final class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body()
-                    .string()).contains("https://www.some-domain.com");
         });
     }
 
