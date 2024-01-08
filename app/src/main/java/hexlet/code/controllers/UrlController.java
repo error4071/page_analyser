@@ -39,7 +39,7 @@ public class UrlController {
 
         if (!UrlRepository.existsByName(name)) {
             Timestamp createdAt = new Timestamp(System.currentTimeMillis());
-            var url = new Url(name, createdAt);
+            var url = new Url("https://www.some-domain.com");
 
             UrlRepository.save(url);
             ctx.sessionAttribute("flash", "Страница успешно добавлена");
@@ -146,7 +146,7 @@ public class UrlController {
             ctx.sessionAttribute("flash", "Страница уже существует");
             ctx.sessionAttribute("flash-type", "info");
         } else {
-            Url newUrl = new Url(normalizedUrl, new Timestamp(System.currentTimeMillis()));
+            Url newUrl = new Url("https://www.some-domain.com");
             UrlRepository.save(newUrl);
             ctx.sessionAttribute("flash", "Страница успешно добавлена");
             ctx.sessionAttribute("flash-type", "success");

@@ -63,7 +63,7 @@ public final class AppTest {
     @Test
     public void testPageUrl() throws Exception {
         JavalinTest.test(app, (server, client) -> {
-            var url = new Url("url=https://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
+            var url = new Url("url=https://www.some-domain.com");
             UrlRepository.save(url);
 
             var response = client.get("/urls");
@@ -75,7 +75,7 @@ public final class AppTest {
 
     @Test
     public void testPageUrls() throws Exception {
-        var url = new Url("url=https://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
+        var url = new Url("url=https://www.some-domain.com");
         UrlRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
