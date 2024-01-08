@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -80,7 +81,7 @@ public final class AppTest {
     }
 
     @Test
-    public void testCreate() throws Exception {
+    public void testCreate() throws SQLException {
         String inputUrl = "https://www.some-domain.com";
 
         JavalinTest.test(app, (server, client) -> {
