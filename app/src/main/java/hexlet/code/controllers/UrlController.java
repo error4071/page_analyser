@@ -140,7 +140,7 @@ public class UrlController {
                 )
                 .toLowerCase();
 
-        Optional<Url> url = UrlRepository.findByName(normalizedUrl);
+        Url url = UrlRepository.findByName(normalizedUrl);
 
         if (url != null) {
             ctx.sessionAttribute("flash", "Страница уже существует");
