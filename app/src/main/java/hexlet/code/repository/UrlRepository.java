@@ -67,7 +67,6 @@ public class UrlRepository extends BaseRepository {
             return Optional.empty();
         }
     }
-
     public static boolean existsByName(String name) throws SQLException {
         return findByName(name) != null;
     }
