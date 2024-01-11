@@ -68,7 +68,7 @@ public class UrlRepository extends BaseRepository {
         }
     }
     public static boolean existsByName(String name) throws SQLException {
-        return findByName(name).isPresent();
+        return findByName(name) != null;
     }
 
     public static List<Url> getEntities() throws SQLException {
