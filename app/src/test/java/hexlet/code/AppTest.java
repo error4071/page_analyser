@@ -85,7 +85,7 @@ public final class AppTest {
     public void testCreate() throws SQLException {
         String inputUrl = "https://www.some-domain.com";
 
-        System.out.println("try to save the url: " + inputUrl);
+        System.out.println("Try to save the url: " + inputUrl);
 
         JavalinTest.test(app, (server, client) -> {
             var requestBody = "url=" + inputUrl;
