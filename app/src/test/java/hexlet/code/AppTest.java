@@ -96,7 +96,7 @@ public final class AppTest {
             System.out.println(url);
         }
 
-        Url actualUrl = UrlRepository.findByName("https://www.some-domain.com").orElse(null);
+        Url actualUrl = UrlRepository.findByName("https://www.some-domain.com");
 
         System.out.println("actualUrl found by name:" + actualUrl);
 
