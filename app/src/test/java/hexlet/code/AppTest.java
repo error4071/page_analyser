@@ -83,12 +83,9 @@ public final class AppTest {
 
     @Test
     public void testCreate() throws SQLException {
-        String inputUrl = "https://www.some-domain.com";
-
-        System.out.println("Try to save the url: " + inputUrl);
 
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=" + inputUrl;
+            var requestBody = "url=https://www.some-domain.com";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
         });
@@ -99,12 +96,12 @@ public final class AppTest {
             System.out.println(url);
         }
 
-        Url actualUrl = UrlRepository.findByName(inputUrl).orElse(null);
+        Url actualUrl = UrlRepository.findByName("https://www.some-domain.com").orElse(null);
 
         System.out.println("actualUrl found by name:" + actualUrl);
 
         assertThat(actualUrl).isNotNull();
-        assertThat(actualUrl.getName()).isEqualTo(inputUrl);
+        assertThat(actualUrl.getName()).isEqualTo("https://www.some-domain.com");
     }
 
     @Test
