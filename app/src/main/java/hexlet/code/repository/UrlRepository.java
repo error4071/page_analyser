@@ -63,9 +63,9 @@ public class UrlRepository extends BaseRepository {
                 Url url = new Url(name);
                 url.setId(id);
                 url.setCreatedAt(createdAt);
-                return Optional.of(url);
+                return url;
             }
-            return Optional.empty();
+            return null;
         }
     }
     public static boolean existsByName(String name) throws SQLException {
