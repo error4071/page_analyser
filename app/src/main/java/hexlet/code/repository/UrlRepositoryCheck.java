@@ -5,6 +5,7 @@ import hexlet.code.model.UrlCheck;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,6 @@ public class UrlRepositoryCheck extends BaseRepository {
     public static List<UrlCheck> getEntities(Long urlId) throws SQLException {
         var sql = "SELECT * FROM url_checks where url_id = ?";
         try (var conn = dataSource.getConnection();
-
              var stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, urlId);
             var resultSet = stmt.executeQuery();
@@ -51,9 +51,10 @@ public class UrlRepositoryCheck extends BaseRepository {
                 var h1 = resultSet.getString("h1");
                 var description = resultSet.getString("description");
                 var createdAt = resultSet.getTimestamp("created_at");
-                var urlCheck = new UrlCheck();
+                var urlCheck = new UrlCheck(statusCode, title, h1, description);
 
                 urlCheck.setId(id);
+                urlCheck.setCreatedAt(createdAt);
                 result.add(urlCheck);
             }
             return result;

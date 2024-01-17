@@ -79,7 +79,6 @@ public class UrlRepository extends BaseRepository {
             var result = new ArrayList<Url>();
 
             while (resultSet.next()) {
-
                 var id = resultSet.getLong("id");
                 var name = resultSet.getString("name");
                 var createdAt = resultSet.getTimestamp("created_at");
