@@ -155,4 +155,3 @@ public class UrlController {
         ctx.redirect("/urls");
     }
 }
-

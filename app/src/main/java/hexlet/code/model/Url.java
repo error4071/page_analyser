@@ -20,4 +20,8 @@ public class Url {
 
     public Url(String name) {
     }
+
+    public Url() {
+
+    }
 }
