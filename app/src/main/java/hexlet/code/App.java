@@ -3,7 +3,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import gg.jte.resolve.ResourceCodeResolver;
 import hexlet.code.controllers.UrlController;
-import hexlet.code.controller.UrlCheckController;
 import hexlet.code.repository.BaseRepository;
 import io.javalin.Javalin;
 import java.io.File;
