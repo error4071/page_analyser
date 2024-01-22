@@ -2,6 +2,7 @@ package hexlet.code;
 
 import hexlet.code.model.Url;
 import hexlet.code.repository.UrlRepository;
+import hexlet.code.repository.UrlRepositoryCheck;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
@@ -15,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,28 +86,28 @@ public final class AppTest {
 
     @Test
     public void testCreate() throws SQLException {
-        Url url = new Url("https://www.some-domain.com");
+        String inputUrl = "https://www.some-domain.com";
 
-        System.out.println("Try to save the url: " + url);
+        System.out.println("Try to save the url: " + inputUrl);
 
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=" + url;
+            var requestBody = "url=" + inputUrl;
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
         });
         System.out.println("Read all urls from DB");
 
         List<Url> all = UrlRepository.getEntities();
-        for (Url url2 : all) {
-            System.out.println(url2);
+        for (Url url : all) {
+            System.out.println(url);
         }
 
-        Url actualUrl = UrlRepository.findByName(String.valueOf(url)).orElse(null);
+        Url actualUrl = UrlRepository.findByName(inputUrl).orElse(null);
 
         System.out.println("actualUrl found by name:" + actualUrl);
 
         assertThat(actualUrl).isNotNull();
-        assertThat(actualUrl.getName()).isEqualTo(url);
+        assertThat(actualUrl.getName()).isEqualTo(inputUrl);
     }
 
     @Test
@@ -117,5 +120,24 @@ public final class AppTest {
 
             assertThat(response.code()).isEqualTo(404);
         });
+    }
+
+    @Test
+    public void testCheck() throws Exception {
+        String urlCheck = mockWebServer.url("https://www.some-domain.com").toString();
+
+        var url = new Url(urlCheck);
+        UrlRepository.save(url);
+
+        JavalinTest.test(app, ((server, client) ->  {
+            var response = client.post("/urls/1/checks");
+            assertThat(response.code()).isEqualTo(200);
+
+            var urlFindCheck = UrlRepositoryCheck.findLastCheck(1L);
+
+            String id = String.valueOf(urlFindCheck.getId());
+
+            assertThat(response.body().string().contains(id));
+        }));
     }
 }

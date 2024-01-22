@@ -5,7 +5,6 @@ import hexlet.code.model.UrlCheck;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class UrlRepositoryCheck extends BaseRepository {
                 var h1 = resultSet.getString("h1");
                 var description = resultSet.getString("description");
                 var createdAt = resultSet.getTimestamp("created_at");
-                var urlCheck = new UrlCheck(statusCode, title, h1, description);
+                var urlCheck = new UrlCheck(statusCode, title, h1, description, urlId, createdAt);
 
                 urlCheck.setId(id);
                 urlCheck.setCreatedAt(createdAt);
@@ -61,7 +60,7 @@ public class UrlRepositoryCheck extends BaseRepository {
         }
     }
 
-    public static UrlCheck getLastCheck(Long urlId) throws SQLException {
+    public static UrlCheck findLastCheck(Long urlId) throws SQLException {
         var sql = "SELECT * FROM url_checks WHERE url_id = ? ORDER BY created_at DESC LIMIT 1";
         try (var conn = dataSource.getConnection();
 
@@ -78,7 +77,7 @@ public class UrlRepositoryCheck extends BaseRepository {
                 var h1 = resultSet.getString("h1");
                 var description = resultSet.getString("description");
                 var createdAt = resultSet.getTimestamp("created_at");
-                urlCheck = new UrlCheck();
+                urlCheck = new UrlCheck(statusCode, title, h1, description, urlId, createdAt);
                 urlCheck.setId(id);
             }
             return urlCheck;
