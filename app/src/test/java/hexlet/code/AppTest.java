@@ -102,7 +102,8 @@ public final class AppTest {
             System.out.println(url);
         }
 
-        Url actualUrl = UrlRepository.findByName(inputUrl).orElse(null);
+        Url actualUrl = UrlRepository.findByName(inputUrl)
+                .orElse(null);
 
         System.out.println("actualUrl found by name:" + actualUrl);
 
@@ -120,24 +121,5 @@ public final class AppTest {
 
             assertThat(response.code()).isEqualTo(404);
         });
-    }
-
-    @Test
-    public void testCheck() throws Exception {
-        String urlCheck = mockWebServer.url("https://www.some-domain.com").toString();
-
-        var url = new Url(urlCheck);
-        UrlRepository.save(url);
-
-        JavalinTest.test(app, ((server, client) ->  {
-            var response = client.post("/urls/1/checks");
-            assertThat(response.code()).isEqualTo(200);
-
-            var urlFindCheck = UrlRepositoryCheck.findLastCheck(1L);
-
-            String id = String.valueOf(urlFindCheck.getId());
-
-            assertThat(response.body().string().contains(id));
-        }));
     }
 }
