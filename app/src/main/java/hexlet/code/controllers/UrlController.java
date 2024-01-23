@@ -63,7 +63,7 @@ public class UrlController {
 
         pagedUrls.forEach(url -> {
             try {
-                lastCheck.add(UrlRepositoryCheck.findLastCheck(url.getId()));
+                lastCheck.add(UrlRepositoryCheck.getLastCheck(url.getId()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -135,41 +135,5 @@ public class UrlController {
             ctx.sessionAttribute("flash-type", "danger");
             ctx.redirect(NamedRoutes.urlPath(id));
         }
-    }
-
-    public static void urlBuild(Context ctx) throws SQLException {
-        var inputUrl = ctx.formParam("url");
-        URL parsedUrl;
-        try {
-            parsedUrl = new URL(inputUrl);
-        } catch (Exception e) {
-            ctx.sessionAttribute("flash", "Некорректный URL");
-            ctx.sessionAttribute("flash-type", "danger");
-            ctx.redirect(NamedRoutes.rootPath());
-            return;
-        }
-
-        String normalizedUrl = String
-                .format(
-                        "%s://%s%s",
-                        parsedUrl.getProtocol(),
-                        parsedUrl.getHost(),
-                        parsedUrl.getPort() == -1 ? "" : ":" + parsedUrl.getPort()
-                )
-                .toLowerCase();
-
-        Optional<Url> url = UrlRepository.findByName(normalizedUrl);
-
-        if (url != null) {
-            ctx.sessionAttribute("flash", "Страница уже существует");
-            ctx.sessionAttribute("flash-type", "info");
-        } else {
-            Url newUrl = new Url(normalizedUrl);
-            UrlRepository.save(newUrl);
-            ctx.sessionAttribute("flash", "Страница успешно добавлена");
-            ctx.sessionAttribute("flash-type", "success");
-        }
-
-        ctx.redirect("/urls");
     }
 }

@@ -2,7 +2,7 @@ package hexlet.code.utils;
 
 import java.net.URL;
 
-public class BuildUrl {
+public class UrlBuild {
     public static String urlBuild(URL url) {
         String protocol = url.getProtocol() == null ? "" : url.getProtocol();
         String host = url.getHost();
