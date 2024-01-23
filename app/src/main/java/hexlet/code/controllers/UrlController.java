@@ -49,14 +49,9 @@ public class UrlController {
         }
     }
     public static void showUrls(Context ctx) throws SQLException {
-
-        List<Url> urls = UrlRepository.getEntities();
-        Map<Long, UrlCheck> urlChecks = UrlRepository.findLatestChecks();
-        var page = new UrlsPage(urls, urlChecks);
-
-        var pageNumber = ctx.queryParamAsClass("page", long.class)
-                .getOrDefault(1L);
-        var per = 15;
+        var urls = UrlRepository.getEntities();
+        var pageNumber = ctx.queryParamAsClass("page", long.class).getOrDefault(1L);
+        var per = 10;
         var firstPost = (pageNumber - 1) * per;
 
         List<Url> pagedUrls = urls.stream()
@@ -74,16 +69,16 @@ public class UrlController {
             }
         });
 
-        String conditionNext = UrlRepository.getEntities()
-                .size() > pageNumber * per
+        String conditionNext = UrlRepository.getEntities().size() > pageNumber * per
                 ? "active" : "disabled";
         String conditionBack = pageNumber > 1 ? "active" : "disabled";
 
-        var pages = new UrlsPage(pagedUrls, pageNumber, lastCheck, conditionNext, conditionBack);
-        pages.setFlash(ctx.consumeSessionAttribute("flash"));
-        pages.setFlashType(ctx.consumeSessionAttribute("flash-type"));
-        ctx.render("urls/index.jte", Collections.singletonMap("page", pages));
+        var page = new UrlsPage(pagedUrls, pageNumber, lastCheck, conditionNext, conditionBack);
+        page.setFlash(ctx.consumeSessionAttribute("flash"));
+        page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
+        ctx.render("urls/index.jte", Collections.singletonMap("page", page));
     }
+
 
     public static void showUrl(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class)
@@ -129,7 +124,7 @@ public class UrlController {
 
             Timestamp createdAt = new Timestamp(System.currentTimeMillis());
 
-            var urlCheck = new UrlCheck();
+            var urlCheck = new UrlCheck(statusCode, title, h1, description, id, createdAt);
             UrlRepositoryCheck.save(urlCheck);
 
             ctx.sessionAttribute("flash", "Страница успешно проверена");
