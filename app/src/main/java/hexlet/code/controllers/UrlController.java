@@ -15,6 +15,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.net.URI;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -22,32 +23,46 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class UrlController {
-    public static void addUrl(Context ctx) throws SQLException {
-        var name = ctx.formParamAsClass("url", String.class)
-                .get()
-                .toLowerCase()
-                .trim();
-
-        if (name.isEmpty()) {
+    public static void createUrl(Context ctx) throws SQLException {
+        var inputUrl = ctx.formParam("url");
+        URI parsedUrl;
+        try {
+            parsedUrl = new URI(inputUrl);
+        } catch (Exception e) {
             ctx.sessionAttribute("flash", "Некорректный URL");
             ctx.sessionAttribute("flash-type", "danger");
             ctx.redirect(NamedRoutes.rootPath());
             return;
         }
 
-        if (!UrlRepository.existsByName(name)) {
-            var url = new Url(name);
+        // Нормализируем урл.
+        // Нужны только протокол, имя домена и порт (если задан).
+        // В случае дефолтного порта 80, его указывать не требуется
+        String normalizedUrl = String
+                .format(
+                        "%s://%s%s",
+                        parsedUrl.getScheme(),
+                        parsedUrl.getHost(),
+                        parsedUrl.getPort() == -1 ? "" : ":" + parsedUrl.getPort()
+                )
+                .toLowerCase();
 
-            UrlRepository.save(url);
+        Url url = UrlRepository.findByName(normalizedUrl)
+                .orElse(null);
+
+        if (url != null) {
+            ctx.sessionAttribute("flash", "Страница уже существует");
+            ctx.sessionAttribute("flash-type", "info");
+        } else {
+            Url newUrl = new Url(normalizedUrl);
+            UrlRepository.save(newUrl);
             ctx.sessionAttribute("flash", "Страница успешно добавлена");
             ctx.sessionAttribute("flash-type", "success");
-            ctx.redirect(NamedRoutes.urlsPath());
-        } else {
-            ctx.sessionAttribute("flash", "Страница уже добавлена");
-            ctx.sessionAttribute("flash-type", "info");
-            ctx.redirect(NamedRoutes.urlsPath());
         }
+
+        ctx.redirect("/urls");
     }
+
     public static void showUrls(Context ctx) throws SQLException {
         var urls = UrlRepository.getEntities();
         var pageNumber = ctx.queryParamAsClass("page", long.class).getOrDefault(1L);
