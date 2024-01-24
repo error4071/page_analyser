@@ -16,7 +16,8 @@ public class UrlsPage extends BasePage {
     private List<Url> urls;
     private Map<Long, UrlCheck> latestChecks;
 
-    public UrlsPage(List<Url> pagedUrls, Long pageNumber, List<UrlCheck> lastCheck, String conditionNext, String conditionBack) {
+    public UrlsPage(List<Url> pagedUrls, Long pageNumber, List<UrlCheck> lastCheck,
+                    String conditionNext, String conditionBack) {
         super();
     }
 }
