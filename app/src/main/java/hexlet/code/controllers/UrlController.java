@@ -50,7 +50,7 @@ public class UrlController {
                 )
                 .toLowerCase();
 
-        Url url = UrlRepository.findByName(normalizedUrl).orElse(null);
+        Url url = UrlRepository.findByName(normalizedUrl);
         System.out.println("normalized url: " + normalizedUrl);
 
         if (url != null) {
