@@ -35,7 +35,7 @@ public final class AppTest {
     }
 
     @BeforeAll
-    public static void beforeAll() throws Exception {
+    public static void beforeAll() throws IOException {
 
         mockWebServer = new MockWebServer();
         MockResponse mockedResponse = new MockResponse()
