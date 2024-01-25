@@ -26,10 +26,12 @@ import java.util.stream.Collectors;
 public class UrlController {
     public static void createUrl(Context ctx) throws SQLException {
         var inputUrl = ctx.formParam("url");
+        System.out.println("createUrl: " + inputUrl);
         URI parsedUrl;
         try {
             parsedUrl = new URI(inputUrl);
         } catch (Exception e) {
+            System.out.println("Некорректный url: " + inputUrl);
             ctx.sessionAttribute("flash", "Некорректный URL");
             ctx.sessionAttribute("flash-type", "danger");
             ctx.redirect(NamedRoutes.rootPath());
@@ -48,21 +50,24 @@ public class UrlController {
                 )
                 .toLowerCase();
 
-        Url url = UrlRepository.findByName(normalizedUrl)
-                .orElse(null);
+        Url url = UrlRepository.findByName(normalizedUrl).orElse(null);
+        System.out.println("normalized url: " + normalizedUrl);
 
         if (url != null) {
+            System.out.println("url уже существует и не будет сохранён");
             ctx.sessionAttribute("flash", "Страница уже существует");
             ctx.sessionAttribute("flash-type", "info");
         } else {
+
             Url newUrl = new Url(normalizedUrl);
             UrlRepository.save(newUrl);
+            System.out.println("url успешно сохранен в БД");
             ctx.sessionAttribute("flash", "Страница успешно добавлена");
             ctx.sessionAttribute("flash-type", "success");
         }
 
         ctx.redirect("/urls");
-    }
+    };
 
     public static void showUrls(Context ctx) throws SQLException {
         var urls = UrlRepository.getEntities();
