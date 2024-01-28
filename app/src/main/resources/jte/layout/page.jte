@@ -1,64 +1,54 @@
 @import gg.jte.Content
-@import hexlet.code.dto.BasePage
 @import hexlet.code.utils.NamedRoutes
+@import hexlet.code.repository.BaseRepository
+
 @param Content content
-@param BasePage page = null
+@param BaseRepository page = null
+@param Content header = null
 
-<!DOCTYPE html>
-<html lang="ru">
+<!doctype html>
+<html lang="en">
 <head>
-    <link rel="shortcut icon" href="#" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Анализатор страниц</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
           crossorigin="anonymous">
+    <title>project_72</title>
 </head>
-
-<body class="d-flex flex-column min-vh-100">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="${NamedRoutes.rootPath()}">Анализатор страниц</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="navbar-nav">
-                <a class="nav-link" href="${NamedRoutes.rootPath()}">Главная</a>
-                <a class="nav-link" href="${NamedRoutes.urlsPath()}">Сайты</a>
+<body>
+<div>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="${NamedRoutes.rootPath()}">Анализатор страниц</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">Сайты</a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
-</nav>
-
-<main class="flex-grow-1">
-    <section>
-        @if(page != null && page.getFlash() != null)
-            <div class="rounded-0 m-0 alert alert-${page.getFlashType()} fade show" role="alert">
-                ${page.getFlash()}
-            </div>
-        @endif
-    </section>
-
-    <section>
+    </nav>
+    <div>
+        ${header}
         ${content}
-    </section>
-</main>
-</body>
-
-<footer class="footer border-top py-3 mt-5 bg-light">
-    <div class="container-xl">
-        <div class="text-center">
-            <p>design by
-                <a href="https://ru.hexlet.io/" target="_blank">Hexlet</a>
-            </p>
-            <p>created by
-                error4071
-            </p>
-        </div>
     </div>
-</footer>
+    <div>
+        <nav class="navbar fixed-bottom bg-body-tertiary" data-bs-theme="dark">
+            <div class="container-fluid d-flex justify-content-center">
+                <p class="fw-lighter text-body-emphasis">
+                    featured by
+                    <a href="https://github.com/paulvino">Pavel Vinogradov</a>
+                    with
+                    <a href="https://ru.hexlet.io">Hexlet</a>
+                </p>
+            </div>
+        </nav>
+    </div>
+</div>
+</body>
 </html>
