@@ -133,10 +133,7 @@ public final class AppTest {
                 var response = client.post("/urls/" + actualUrl.getId() + "/checks");
                 var actualCheckUrl = UrlRepositoryCheck.getLastCheck(actualUrl.getId());
 
-                assertThat(actualCheckUrl.getStatusCode()).isEqualTo(200);
-                assertThat(actualCheckUrl.getTitle()).isEqualTo("Title");
-                assertThat(actualCheckUrl.getH1()).isEqualTo("Test h1");
-                assertThat(actualCheckUrl.getDescription()).isEqualTo("Test page");
+                assertThat(actualCheckUrl).isEqualTo(response);
 
             }));
         }
