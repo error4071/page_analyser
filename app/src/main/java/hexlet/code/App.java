@@ -20,8 +20,10 @@ import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 public final class App {
+
+    private  static final String JDBC_DATABASE_URL = "JDBC_DATABASE_URL=jdbc:postgresql://dpg-cl7mohivokcc73anqfag-a:5432/hexlet_n7nw";
     private static String getDatabaseUrl() {
-        return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project");
+        return System.getenv().getOrDefault(JDBC_DATABASE_URL, "jdbc:h2:mem:project");
     }
 
     private static String getMode() {
@@ -41,7 +43,7 @@ public final class App {
 
     private static int getPort() {
         String port = System.getenv()
-                .getOrDefault("PORT", "3000");
+                .getOrDefault("PORT", "5432");
         return Integer.valueOf(port);
     }
 
