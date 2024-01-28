@@ -36,7 +36,6 @@ public final class AppTest {
 
     @BeforeAll
     public static void beforeAll() throws IOException {
-
         mockWebServer = new MockWebServer();
         MockResponse mockedResponse = new MockResponse()
                 .setResponseCode(200)
@@ -52,7 +51,6 @@ public final class AppTest {
 
     @Test
     public void testMainPage() throws Exception {
-
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/");
             assertThat(response.code()).isEqualTo(200);
@@ -116,6 +114,18 @@ public final class AppTest {
             var response = client.get("/urls/" + url.getId());
 
             assertThat(response.code()).isEqualTo(404);
+        });
+    }
+
+    @Test
+    public void testShowUrlById() throws SQLException {
+        Url url = new Url("https://www.some-domain.com");
+        UrlRepository.save(url);
+
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.get("/urls/" + url.getId());
+            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string()).contains("https://www.some-domain.com");
         });
     }
 }
