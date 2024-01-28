@@ -120,25 +120,26 @@ public final class AppTest {
     }
 
     @Test
-    public void testCreateCheck() throws Exception {
-        String urlForCheck = mockWebServer.url("http://www.example.com")
-                .toString();
+    public void testCreateCheck() throws SQLException, IOException {
+        try (MockWebServer mockServer = new MockWebServer()) {
+            String testUrl = mockServer.url("/").toString();
+            MockResponse mockResponse = new MockResponse().setBody(readResourceFile("index.html"));
+            mockServer.enqueue(mockResponse);
 
-        var url = new Url(urlForCheck);
-        UrlRepository.save(url);
+            var actualUrl = new Url(testUrl);
+            UrlRepository.save(actualUrl);
 
-        JavalinTest.test(app, (server, client) -> {
-            var response = client.post("/urls/1/checks");
-            assertThat(response.code()).isEqualTo(404);
+            JavalinTest.test(app, ((server, client) -> {
+                var response = client.post("/urls/" + actualUrl.getId() + "/checks");
+                var actualCheckUrl = UrlRepositoryCheck.getLastCheck(actualUrl.getId());
 
-            var urlCheck = UrlRepositoryCheck.getLastCheck(1L);
+                assertThat(actualCheckUrl.getStatusCode()).isEqualTo(200);
+                assertThat(actualCheckUrl.getTitle()).isEqualTo("Title");
+                assertThat(actualCheckUrl.getH1()).isEqualTo("Test h1");
+                assertThat(actualCheckUrl.getDescription()).isEqualTo("Test page");
 
-            String id = String.valueOf(urlCheck.getId());
-            String title = urlCheck.getTitle();
-            String statusCode = String.valueOf(urlCheck.getStatusCode());
-
-            assertThat(response.body()
-                    .string()).contains(id, title, statusCode);
-        });
+            }));
+        }
     }
 }
+
