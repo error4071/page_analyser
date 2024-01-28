@@ -29,6 +29,5 @@ public class UrlsPage extends BasePage {
         this.lastCheck = lastCheck;
         this.conditionNext = conditionNext;
         this.conditionBack = conditionBack;
-        
     }
 }
