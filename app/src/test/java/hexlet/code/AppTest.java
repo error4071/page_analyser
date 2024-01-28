@@ -120,11 +120,9 @@ public final class AppTest {
 
     @Test
     public void testCreateCheck() throws Exception {
-        String urlForCheck = mockWebServer.url("http://www.example.com")
-                .toString();
+        var urlForCheck = new Url("http://www.some-domain.com");
 
-        var url = new Url(urlForCheck);
-        UrlRepository.save(url);
+        UrlRepository.save(urlForCheck);
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.post("/urls/1/checks");
