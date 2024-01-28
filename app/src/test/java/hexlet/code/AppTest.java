@@ -2,6 +2,7 @@ package hexlet.code;
 
 import hexlet.code.model.Url;
 import hexlet.code.repository.UrlRepository;
+import hexlet.code.repository.UrlRepositoryCheck;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
@@ -114,6 +115,29 @@ public final class AppTest {
             var response = client.get("/urls/" + url.getId());
 
             assertThat(response.code()).isEqualTo(404);
+        });
+    }
+
+    @Test
+    public void testCreateCheck() throws Exception {
+        String urlForCheck = mockWebServer.url("http://www.example.com")
+                .toString();
+
+        var url = new Url(urlForCheck);
+        UrlRepository.save(url);
+
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.post("/urls/1/checks");
+            assertThat(response.code()).isEqualTo(200);
+
+            var urlCheck = UrlRepositoryCheck.getLastCheck(1L);
+
+            String id = String.valueOf(urlCheck.getId());
+            String title = urlCheck.getTitle();
+            String statusCode = String.valueOf(urlCheck.getStatusCode());
+
+            assertThat(response.body()
+                    .string()).contains(id, title, statusCode);
         });
     }
 }
