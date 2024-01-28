@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -120,9 +121,11 @@ public final class AppTest {
 
     @Test
     public void testCreateCheck() throws Exception {
-        var urlForCheck = new Url("http://www.some-domain.com");
+        String urlForCheck = mockWebServer.url("http://www.example.com")
+                .toString();
 
-        UrlRepository.save(urlForCheck);
+        var url = new Url(urlForCheck);
+        UrlRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.post("/urls/1/checks");
