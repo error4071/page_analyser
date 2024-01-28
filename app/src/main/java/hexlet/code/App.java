@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 
 public final class App {
 
-    private  static final String JDBC_DATABASE_URL = "JDBC_DATABASE_URL=jdbc:postgresql://dpg-cl7mohivokcc73anqfag-a:5432/hexlet_n7nw";
+    private  static final String JDBC_DATABASE_URL =
+            "JDBC_DATABASE_URL=jdbc:postgresql://dpg-cl7mohivokcc73anqfag-a:5432/hexlet_n7nw";
     private static String getDatabaseUrl() {
         return System.getenv().getOrDefault(JDBC_DATABASE_URL, "jdbc:h2:mem:project");
     }
