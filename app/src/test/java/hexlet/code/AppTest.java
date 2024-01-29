@@ -138,7 +138,7 @@ public final class AppTest {
 
     @Test
     public void testEmptyCheck() throws Exception {
-        String urlForCheck = mockWebServer.url("http://www.some-domain.com").toString();
+        var urlForCheck = new Url("http://www.some-domain.com").toString();
 
         var url = new Url(urlForCheck);
         UrlRepository.save(url);
