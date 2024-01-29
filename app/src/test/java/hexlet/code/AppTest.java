@@ -2,6 +2,7 @@ package hexlet.code;
 
 import hexlet.code.model.Url;
 import hexlet.code.repository.UrlRepository;
+import hexlet.code.repository.UrlRepositoryCheck;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
@@ -15,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,6 +68,7 @@ public final class AppTest {
         JavalinTest.test(app, ((server, client) -> {
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string()).contains("https://www.some-domain.com");
         }));
     }
 
@@ -76,6 +80,7 @@ public final class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
             assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string()).contains("https://www.some-domain.com");
         });
     }
 
@@ -129,5 +134,21 @@ public final class AppTest {
                     .contains("Анализатор страниц")
                     .contains("https://www.some-domain.com");
         });
+    }
+
+    @Test
+    public void testEmptyCheck() throws Exception {
+        String urlForCheck = mockWebServer.url("http://www.some-domain.com").toString();
+
+        var url = new Url(urlForCheck);
+        UrlRepository.save(url);
+
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.post("/urls/1/checks");
+            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string()).doesNotContain("Анализатор страниц");
+        });
+
+        assertThat(UrlRepositoryCheck.getEntities(1L));
     }
 }
