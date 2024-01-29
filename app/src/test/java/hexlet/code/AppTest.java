@@ -149,6 +149,6 @@ public final class AppTest {
             assertThat(response.body().string()).doesNotContain("Example Domain");
         });
 
-        assertThat(UrlRepositoryCheck.getEntities(1L));
+        assertThat(UrlRepositoryCheck.getEntities(1L)).isSameAs(1);
     }
 }
