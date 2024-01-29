@@ -126,7 +126,7 @@ public final class AppTest {
             var response = client.get("/urls/" + url.getId());
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body().string())
-                    .contains("Проверки")
+                    .contains("Анализатор страниц")
                     .contains("https://www.some-domain.com");
         });
     }
