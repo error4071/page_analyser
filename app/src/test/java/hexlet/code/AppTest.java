@@ -149,4 +149,27 @@ public final class AppTest {
 
         assertThat(UrlRepositoryCheck.getEntities(1L));
     }
+
+    @Test
+    public void testCreateCheck() throws Exception {
+        String urlForCheck = mockWebServer.url("http://www.example.com").toString();
+
+        var url = new Url(urlForCheck);
+        UrlRepository.save(url);
+
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.post("/urls/1/checks");
+            assertThat(response.code()).isEqualTo(200);
+
+            var urlCheck = UrlRepositoryCheck.getLastCheck(1L);
+
+            String id = String.valueOf(urlCheck.getId());
+            String title = urlCheck.getTitle();
+            String statusCode = String.valueOf(urlCheck.getStatusCode());
+
+            assertThat(response.body().string()).contains(id, title, statusCode);
+        });
+
+        assertThat(UrlRepositoryCheck.getEntities(1L));
+    }
 }
