@@ -116,5 +116,16 @@ public final class AppTest {
             assertThat(response.code()).isEqualTo(404);
         });
     }
-}
 
+    @Test
+    public void testShowUrlById() throws SQLException {
+        var url = new Url("https://some-domain.com");
+        UrlRepository.save(url);
+
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.get("/urls/" + url.getId());
+            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string()).contains("https://some-domain.com");
+        });
+    }
+}
