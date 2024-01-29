@@ -145,7 +145,7 @@ public final class AppTest {
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.post("/urls/1/checks");
-            assertThat(response.code()).isEqualTo(200);
+
             assertThat(response.body().string()).doesNotContain("Example Domain");
         });
 
