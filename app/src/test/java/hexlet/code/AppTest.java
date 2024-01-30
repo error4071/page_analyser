@@ -86,23 +86,13 @@ public final class AppTest {
     public void testCreate() throws SQLException {
         String inputUrl = "https://www.some-domain.com";
 
-        System.out.println("Try to save the url: " + inputUrl);
-
         JavalinTest.test(app, (server, client) -> {
             var requestBody = "url=" + inputUrl;
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
         });
-        System.out.println("Read all urls from DB");
-
-        List<Url> all = UrlRepository.getEntities();
-        for (Url url : all) {
-            System.out.println(url);
-        }
 
         Url actualUrl = UrlRepository.findByName(inputUrl).orElse(null);
-
-        System.out.println("actualUrl found by name:" + actualUrl);
 
         assertThat(actualUrl).isNotNull();
         assertThat(actualUrl.getName()).isEqualTo(inputUrl);
