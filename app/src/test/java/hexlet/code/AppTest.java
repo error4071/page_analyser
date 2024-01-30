@@ -4,7 +4,6 @@ import hexlet.code.model.Url;
 import hexlet.code.repository.UrlRepository;
 import hexlet.code.repository.UrlRepositoryCheck;
 import io.javalin.Javalin;
-import io.javalin.http.NotFoundResponse;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
