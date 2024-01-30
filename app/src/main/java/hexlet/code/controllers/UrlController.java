@@ -122,4 +122,38 @@ public class UrlController {
         page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
         ctx.render("urls/show.jte", Collections.singletonMap("page", page));
     }
+
+    public static void checkUrl(Context ctx) throws SQLException {
+        long id = ctx.pathParamAsClass("id", Long.class)
+                .get();
+        var url = UrlRepository.find(id)
+                .orElseThrow(() -> new NotFoundResponse("Url not found"));
+
+        try {
+            HttpResponse<String> response = Unirest.get(url.getName())
+                    .asString();
+
+            var statusCode = response.getStatus();
+
+            Document doc = Jsoup.parse(response.getBody());
+            String title = doc.title();
+            Element h1Element = doc.selectFirst("h1");
+            String h1 = h1Element != null ? h1Element.text() : "";
+            Element descElement = doc.selectFirst("meta[name=description]");
+            String description = descElement != null ? descElement.attr("content") : "";
+
+            Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+
+            var urlCheck = new UrlCheck(statusCode, title, h1, description, id, createdAt);
+            UrlRepositoryCheck.save(urlCheck);
+
+            ctx.sessionAttribute("flash", "Страница успешно проверена");
+            ctx.sessionAttribute("flash-type", "success");
+            ctx.redirect(NamedRoutes.urlPath(id));
+        } catch (Exception e) {
+            ctx.sessionAttribute("flash", "Неверный URL");
+            ctx.sessionAttribute("flash-type", "danger");
+            ctx.redirect(NamedRoutes.urlPath(id));
+        }
+    }
 }
