@@ -153,7 +153,7 @@ public final class AppTest {
     @Test
     public void testCreateUrl() throws Exception {
         JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=https://www.some-domaine.com";
+            var requestBody = "url=https://www.some-domain.com";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
             var url = UrlRepository.find(1L)
