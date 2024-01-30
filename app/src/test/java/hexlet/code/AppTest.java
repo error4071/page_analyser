@@ -4,6 +4,7 @@ import hexlet.code.model.Url;
 import hexlet.code.repository.UrlRepository;
 import hexlet.code.repository.UrlRepositoryCheck;
 import io.javalin.Javalin;
+import io.javalin.http.NotFoundResponse;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -82,16 +84,26 @@ public final class AppTest {
     }
 
     @Test
-    public void testCreate() throws SQLException {
+    public void testStore() throws SQLException {
         String inputUrl = "https://www.some-domain.com";
+
+        System.out.println("Try to save the url: " + inputUrl);
 
         JavalinTest.test(app, (server, client) -> {
             var requestBody = "url=" + inputUrl;
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
         });
+        System.out.println("Read all urls from DB");
+
+        List<Url> all = UrlRepository.getEntities();
+        for (Url url : all) {
+            System.out.println(url);
+        }
 
         Url actualUrl = UrlRepository.findByName(inputUrl).orElse(null);
+
+        System.out.println("actualUrl found by name:" + actualUrl);
 
         assertThat(actualUrl).isNotNull();
         assertThat(actualUrl.getName()).isEqualTo(inputUrl);
@@ -136,5 +148,22 @@ public final class AppTest {
             assertThat(response.body().string()).doesNotContain("Анализатор страниц");
         });
         assertThat(UrlRepositoryCheck.getEntities(1L));
+    }
+
+    @Test
+    public void testCreateUrl() throws Exception {
+        JavalinTest.test(app, (server, client) -> {
+            var requestBody = "url=https://www.some-domaine.com";
+            var response = client.post("/urls", requestBody);
+            assertThat(response.code()).isEqualTo(200);
+            var url = UrlRepository.find(1L)
+                    .orElseThrow(() -> new NotFoundResponse("Url not found"));
+
+            String id = String.valueOf(url.getId());
+            String name = url.getName();
+
+            assertThat(response.body().string()).contains(id, name);
+        });
+        assertThat(UrlRepository.getEntities());
     }
 }
