@@ -84,7 +84,7 @@ public class UrlController {
 
         pagedUrls.forEach(url -> {
             try {
-                lastCheck.add(UrlRepositoryCheck.getLastCheck(url.getId()));
+                lastCheck.add(UrlRepositoryCheck.getLastCheck());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
