@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,7 +62,7 @@ public final class AppTest {
 
     @Test
     public void testUrlPage() throws Exception {
-        var url = new Url("url=https://www.some-domain.com");
+        var url = new Url("url=https://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
         UrlRepository.save(url);
 
         JavalinTest.test(app, ((server, client) -> {
@@ -73,7 +75,7 @@ public final class AppTest {
 
     @Test
     public void testUrlsPage() throws Exception {
-        var url = new Url("url=https://www.some-domain.com");
+        var url = new Url("url=https://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
         UrlRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
