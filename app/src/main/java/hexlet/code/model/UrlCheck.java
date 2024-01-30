@@ -28,7 +28,6 @@ public class UrlCheck {
     }
 
     public UrlCheck() {
-
     }
 
     public UrlCheck(int statusCode, String title, String h1, String description) {
