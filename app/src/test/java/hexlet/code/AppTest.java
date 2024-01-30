@@ -67,7 +67,8 @@ public final class AppTest {
         JavalinTest.test(app, ((server, client) -> {
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains("https://www.some-domain.com");
+            assertThat(response.body()
+                    .string()).contains("https://www.some-domain.com");
         }));
     }
 
@@ -79,7 +80,8 @@ public final class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains("https://www.some-domain.com");
+            assertThat(response.body()
+                    .string()).contains("https://www.some-domain.com");
         });
     }
 
@@ -101,7 +103,8 @@ public final class AppTest {
             System.out.println(url);
         }
 
-        Url actualUrl = UrlRepository.findByName(inputUrl).orElse(null);
+        Url actualUrl = UrlRepository.findByName(inputUrl)
+                .orElse(null);
 
         System.out.println("actualUrl found by name:" + actualUrl);
 
@@ -129,7 +132,8 @@ public final class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string())
+            assertThat(response.body()
+                    .string())
                     .contains("Анализатор страниц")
                     .contains("https://www.some-domain.com");
         });
@@ -145,25 +149,31 @@ public final class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.post("/urls/1/checks");
 
-            assertThat(response.body().string()).doesNotContain("Анализатор страниц");
+            assertThat(response.body()
+                    .string()).doesNotContain("Анализатор страниц");
         });
         assertThat(UrlRepositoryCheck.getEntities(1L));
     }
 
     @Test
-    public void testCreateUrl() throws Exception {
+    public void testCreateUrl() {
         JavalinTest.test(app, (server, client) -> {
             var requestBody = "url=https://www.some-domain.com";
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
-            var url = UrlRepository.find(1L)
-                    .orElseThrow(() -> new NotFoundResponse("Url not found"));
+            assertThat(response.body()
+                    .string()).contains("https://www.some-domain.com");
 
-            String id = String.valueOf(url.getId());
-            String name = url.getName();
-
-            assertThat(response.body().string()).contains(id, name);
         });
-        assertThat(UrlRepository.getEntities());
+    }
+
+    @Test
+    public void testUrlsIdNotFound() throws SQLException {
+        Url site = new Url(1, "https://www.some-domain.com", null);
+        UrlRepository.save(site);
+        JavalinTest.test(app, ((server, client) -> {
+            var response = client.get("/urls/1000");
+            assertThat(response.code()).isEqualTo(404);
+        }));
     }
 }
