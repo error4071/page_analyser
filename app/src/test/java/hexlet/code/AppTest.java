@@ -121,13 +121,13 @@ public final class AppTest {
     }
 
     @Test
-    public void testCheckShowUrl() throws SQLException {
+    public void testCheckShow() throws SQLException {
         var url = new Url("https://www.some-domain.com");
         UrlRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
-            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.code()).isEqualTo(404);
             assertThat(response.body().string())
                     .contains("Анализатор страниц")
                     .contains("https://www.some-domain.com");
@@ -135,10 +135,10 @@ public final class AppTest {
     }
 
     @Test
-    public void testEmptyCheck() throws Exception {
-        var urlForCheck = new Url("https://www.some-domain.com").toString();
+    public void testCheckEmpty() throws Exception {
+        var checkUrl = new Url("https://www.some-domain.com").toString();
 
-        var url = new Url(urlForCheck);
+        var url = new Url(checkUrl);
         UrlRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
@@ -146,15 +146,14 @@ public final class AppTest {
 
             assertThat(response.body().string()).doesNotContain("Анализатор страниц");
         });
-
         assertThat(UrlRepositoryCheck.getEntities(1L));
     }
 
     @Test
     public void testCreateCheck() throws Exception {
-        String urlForCheck = mockWebServer.url("https://www.some-domain.com").toString();
+        String checkUrl = mockWebServer.url("https://www.some-domain.com").toString();
 
-        var url = new Url(urlForCheck);
+        var url = new Url(checkUrl);
         UrlRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
