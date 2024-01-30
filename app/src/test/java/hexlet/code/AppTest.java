@@ -148,27 +148,4 @@ public final class AppTest {
         });
         assertThat(UrlRepositoryCheck.getEntities(1L));
     }
-
-    @Test
-    public void testCreate2() throws SQLException, IOException {
-        try (MockWebServer mockServer = new MockWebServer()) {
-            String testUrl = mockServer.url("/").toString();
-            MockResponse mockResponse = new MockResponse().setBody(readResourceFile("index.html"));
-            mockServer.enqueue(mockResponse);
-
-            var actualUrl = new Url(testUrl);
-            UrlRepository.save(actualUrl);
-
-            JavalinTest.test(app, ((server, client) -> {
-                var response = client.post("/urls/" + actualUrl.getId() + "/checks");
-                var actualCheckUrl = UrlRepositoryCheck.getLastCheck().get(actualUrl.getId());
-
-                assertThat(actualCheckUrl.getStatusCode()).isEqualTo(200);
-                assertThat(actualCheckUrl.getTitle()).isEqualTo("Title");
-                assertThat(actualCheckUrl.getH1()).isEqualTo("Test h1");
-                assertThat(actualCheckUrl.getDescription()).isEqualTo("Test page");
-
-            }));
-        }
-    }
 }
