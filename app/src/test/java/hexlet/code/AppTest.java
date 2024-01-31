@@ -5,6 +5,7 @@ import hexlet.code.repository.UrlRepository;
 import hexlet.code.repository.UrlRepositoryCheck;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
+import kong.unirest.Unirest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.BeforeAll;
@@ -60,15 +61,26 @@ public final class AppTest {
 
     @Test
     public void testUrlPage() throws SQLException {
+
+
+
         var url = new Url("url=https://www.some-domain.com");
         UrlRepository.save(url);
+
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body()
-                    .string()).contains("https://www.some-domain");
+                    .string()).contains("https://www.some-domain.com");
         });
+
+        String body = Unirest.get("https://www.some-domain.com")
+                .asString()
+                .getBody();
+
+        assertThat(body).isEqualTo("https://www.some-domain.com");
+
     }
 
     @Test
