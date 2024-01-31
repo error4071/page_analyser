@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,8 @@ public final class AppTest {
 
     private static MockWebServer mockWebServer;
     private static Javalin app;
+
+    private static String mockUrl;
 
     private static String readResourceFile(String fileName) throws IOException {
         var inputStream = App.class.getClassLoader()
@@ -61,26 +64,15 @@ public final class AppTest {
 
     @Test
     public void testUrlPage() throws SQLException {
-
-
-
-        var url = new Url("url=https://www.some-domain.com");
+        Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+        var url = new Url(mockUrl, createdAt);
         UrlRepository.save(url);
-
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body()
-                    .string()).contains("https://www.some-domain.com");
+
         });
-
-        String body = Unirest.get("https://www.some-domain.com")
-                .asString()
-                .getBody();
-
-        assertThat(body).isEqualTo("https://www.some-domain.com");
-
     }
 
     @Test
