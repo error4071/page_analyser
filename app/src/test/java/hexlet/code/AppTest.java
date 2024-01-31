@@ -67,7 +67,7 @@ public final class AppTest {
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body()
-                    .string()).contains("https://www.some-domain.com");
+                    .string()).isEqualTo(url);
         });
     }
 
