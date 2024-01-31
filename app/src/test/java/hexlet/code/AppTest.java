@@ -5,7 +5,6 @@ import hexlet.code.repository.UrlRepository;
 import hexlet.code.repository.UrlRepositoryCheck;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
-import kong.unirest.Unirest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.BeforeAll;
