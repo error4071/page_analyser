@@ -53,7 +53,7 @@ public final class AppTest {
     }
 
     @Test
-    public void testMainPage() throws Exception {
+    public void testMainPage() {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/");
             assertThat(response.code()).isEqualTo(200);
@@ -61,21 +61,21 @@ public final class AppTest {
     }
 
     @Test
-    public void testUrlPage() throws Exception {
-        var url = new Url("url=https://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
+    public void testUrlPage() throws SQLException {
+        var url = new Url("url=https://www.some-domain.com");
         UrlRepository.save(url);
 
-        JavalinTest.test(app, ((server, client) -> {
+        JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body()
                     .string()).contains("https://www.some-domain.com");
-        }));
+        });
     }
 
     @Test
     public void testUrlsPage() throws Exception {
-        var url = new Url("url=https://www.some-domain.com", Timestamp.valueOf(LocalDateTime.now()));
+        var url = new Url("url=https://www.some-domain.com");
         UrlRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {

@@ -36,6 +36,5 @@ public class UrlCheck {
         this.title = title;
         this.h1 = h1;
         this.description = description;
-
     }
 }
