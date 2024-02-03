@@ -24,7 +24,7 @@ content = @`
             </thead>
             <tbody>
             @for(var url : page.getUrls())
-                !{var urlCheck = page.getLatestChecks().get(url.getId());}
+                !{var urlCheck = page.getLastCheck().get(url.getId());}
 
                 <tr>
                     <td>

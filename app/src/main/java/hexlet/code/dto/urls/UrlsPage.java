@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Getter
@@ -17,5 +18,4 @@ public class UrlsPage extends BasePage {
     private List<UrlCheck> lastCheck;
     private String conditionNext;
     private String conditionBack;
-
 }

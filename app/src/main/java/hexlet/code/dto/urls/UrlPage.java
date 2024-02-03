@@ -12,9 +12,9 @@ import java.util.List;
 @Getter
 
 public class UrlPage extends BasePage {
-    public Url url;
-    public long pageNumber;
-    public List<UrlCheck> urlChecks;
-    public String conditionNext;
-    public String conditionBack;
+    private Url url;
+    private long pageNumber;
+    private List<UrlCheck> urlChecks;
+    private String conditionNext;
+    private String conditionBack;
 }
