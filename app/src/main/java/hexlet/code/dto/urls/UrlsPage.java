@@ -3,11 +3,13 @@ package hexlet.code.dto.urls;
 import hexlet.code.dto.BasePage;
 import hexlet.code.model.Url;
 import hexlet.code.model.UrlCheck;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 @Getter
 
 public class UrlsPage extends BasePage {
@@ -21,11 +23,5 @@ public class UrlsPage extends BasePage {
 
     public UrlsPage(List<Url> pagedUrls, Long pageNumber, List<UrlCheck> lastCheck,
                     String conditionNext, String conditionBack) {
-        super();
-        this.pagedUrls = pagedUrls;
-        this.pageNumber = pageNumber;
-        this.lastCheck = lastCheck;
-        this.conditionNext = conditionNext;
-        this.conditionBack = conditionBack;
     }
 }
