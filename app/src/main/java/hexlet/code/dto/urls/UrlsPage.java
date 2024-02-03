@@ -13,10 +13,21 @@ import java.util.Map;
 @Getter
 
 public class UrlsPage extends BasePage {
+    private Long pageNumber;
+    private List<Url> pagedUrls;
     private List<Url> urls;
     private Map<Long, UrlCheck> latestChecks;
+    private List<UrlCheck> lastCheck;
+    private String conditionNext;
+    private String conditionBack;
 
     public UrlsPage(List<Url> pagedUrls, Long pageNumber, List<UrlCheck> lastCheck,
                     String conditionNext, String conditionBack) {
+        super();
+        this.pagedUrls = pagedUrls;
+        this.pageNumber = pageNumber;
+        this.lastCheck = lastCheck;
+        this.conditionNext = conditionNext;
+        this.conditionBack = conditionBack;
     }
 }

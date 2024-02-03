@@ -25,6 +25,7 @@ public final class AppTest {
 
     private static MockWebServer mockWebServer;
     private static Javalin app;
+
     private static String readResourceFile(String fileName) throws IOException {
         var inputStream = App.class.getClassLoader()
                 .getResourceAsStream(fileName);
@@ -58,10 +59,7 @@ public final class AppTest {
     }
 
     @Test
-    public void testUrlPage() throws SQLException {
-        var url = new Url("url=https://www.some-domain.com");
-        UrlRepository.save(url);
-
+    public void testUrlPage() {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls");
             assertThat(response.code()).isEqualTo(200);
@@ -71,9 +69,8 @@ public final class AppTest {
     }
 
     @Test
-    public void testUrlsPage() throws Exception {
+    public void testUrlsPage() {
         var url = new Url("url=https://www.some-domain.com");
-        UrlRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
