@@ -14,9 +14,6 @@ import java.util.List;
 
 public class UrlsPage extends BasePage {
     private List<Url> urls;
-    private long pageNumber;
-    private List<UrlCheck> lastCheck;
-    private String conditionNext;
-    private String conditionBack;
+    private int pageNumber;
 }
 

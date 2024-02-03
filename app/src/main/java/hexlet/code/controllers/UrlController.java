@@ -67,55 +67,40 @@ public class UrlController {
         }
 
         ctx.redirect("/urls");
-    };
-
-    public static void showUrls(Context ctx) throws SQLException {
-        var urls = UrlRepository.getEntities();
-        var pageNumber = ctx.queryParamAsClass("page", long.class).getOrDefault(1L);
-        var per = 10;
-        var firstPost = (pageNumber - 1) * per;
-
-        List<Url> pagedUrls = urls.stream()
-                .skip(firstPost)
-                .limit(per)
-                .collect(Collectors.toList());
-
-        List<UrlCheck> lastCheck = new ArrayList<>();
-
-        pagedUrls.forEach(url -> {
-            try {
-                lastCheck.add(UrlRepositoryCheck.getLastCheck(url.getId()));
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        String conditionNext = UrlRepository.getEntities().size() > pageNumber * per
-                ? "active" : "disabled";
-        String conditionBack = pageNumber > 1 ? "active" : "disabled";
-
-        var page = new UrlsPage(pagedUrls, pageNumber, lastCheck, conditionNext, conditionBack);
-        page.setFlash(ctx.consumeSessionAttribute("flash"));
-        page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
-        ctx.render("urls/index.jte", Collections.singletonMap("page", page));
     }
 
+        public static void showUrls (Context ctx) throws SQLException {
+            var urls = UrlRepository.getEntities();
+            var pageNumber = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
+            var per = 10;
+            var firstPost = (pageNumber - 1) * per;
+
+            List<Url> pagedUrls = urls.stream()
+                    .skip(firstPost)
+                    .limit(per)
+                    .collect(Collectors.toList());
+
+            pagedUrls.forEach(url -> {
+                try {
+                    url.setLastCheck(UrlRepositoryCheck.getLastCheck(url.getId()));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            var page = new UrlsPage(pagedUrls, pageNumber);
+            page.setFlash(ctx.consumeSessionAttribute("flash"));
+            page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
+            ctx.render("urls/index.jte", Collections.singletonMap("page", page));
+        }
+
     public static void showUrl(Context ctx) throws SQLException {
-        var id = ctx.pathParamAsClass("id", Long.class)
-                .get();
-        var pageNumber = ctx.queryParamAsClass("page", long.class)
-                .getOrDefault(id);
+        var id = ctx.pathParamAsClass("id", Long.class).get();
         var url = UrlRepository.find(id)
                 .orElseThrow(() -> new NotFoundResponse("Url not found"));
 
         var urlChecks = UrlRepositoryCheck.getEntities(id);
-
-        final long urlPerPage = 5;
-
-        String conditionNext = UrlRepositoryCheck.getEntities(id)
-                .size() > pageNumber * urlPerPage
-                ? "active" : "disabled";
-        String conditionBack = pageNumber > 1 ? "active" : "disabled";
+        url.setUrlChecks(urlChecks);
 
         var page = new UrlPage(url);
         page.setFlash(ctx.consumeSessionAttribute("flash"));
