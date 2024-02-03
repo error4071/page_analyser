@@ -1,5 +1,6 @@
 @import hexlet.code.dto.urls.UrlsPage
 @import hexlet.code.utils.NamedRoutes
+@import java.time.format.DateTimeFormatter
 
 @param UrlsPage page
 
@@ -29,12 +30,12 @@ content = @`
                     <td>
                         <a href="/urls/${url.getId()}">${url.getName()}</a>
                     </td>
-                    @if((page.getLastCheck().stream().anyMatch(check -> check.getUrlId() != null && check.getUrlId() == url.getId())))
+                    @if((url.getLastCheck() != null) && (url.getLastCheck().getCreatedAt() != null))
                         <td>
-                            ${page.getLastCheck().stream().filter(check -> check.getUrlId() == url.getId()).findFirst().get().getCreatedAt().toString().substring(0,16)}
+                            ${url.getLastCheck().getCreatedAt().toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}
                         </td>
                         <td>
-                            ${page.getLastCheck().stream().filter(check -> check.getUrlId() == url.getId()).findFirst().get().getStatusCode()}
+                            ${url.getLastCheck().getStatusCode()}
                         </td>
                     @else
                         <td>
@@ -49,16 +50,16 @@ content = @`
 
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center mt-5">
-                <li class="page-item ${page.getConditionBack()}">
+                <li class="page-item">
                     <a class="page-link" href="?page=${page.getPageNumber() < 2 ? 1 : page.getPageNumber() - 1}"
                        aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
-                <li class="page-item active"><a class="page-link"
-                                                href="${NamedRoutes.urlsPath()}?page=${page.getPageNumber()}">${page.getPageNumber()}</a>
+                <li class="page-item"><a class="page-link"
+                                         href="${NamedRoutes.urlsPath()}?page=${page.getPageNumber()}">${page.getPageNumber()}</a>
                 </li>
-                <li class="page-item ${page.getConditionNext()}">
+                <li class="page-item">
                     <a class="page-link" href="?page=${page.getPageNumber() + 1}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
