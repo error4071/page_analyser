@@ -1,10 +1,8 @@
 @import hexlet.code.dto.urls.UrlsPage
 @import hexlet.code.utils.NamedRoutes
 
-@import java.time.format.DateTimeFormatter
 @param UrlsPage page
 
-!{var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");}
 
 @template.layout.page(
 page = page,
@@ -24,22 +22,26 @@ content = @`
             </thead>
             <tbody>
             @for(var url : page.getUrls())
-                !{var urlCheck = page.getLastCheck().get(url.getId());}
-
                 <tr>
                     <td>
                         ${url.getId()}
                     </td>
                     <td>
-                        <a href="${NamedRoutes.urlPath(url.getId())}">${url.getName()}</a>
+                        <a href="/urls/${url.getId()}">${url.getName()}</a>
                     </td>
-                    <td>
-                        ${urlCheck == null ? "" : urlCheck.getCreatedAt().toLocalDateTime().format(formatter)}
-                    </td>
-                    <td>
-                        ${urlCheck == null ? "" : String.valueOf(urlCheck.getStatusCode())}
-                    </td>
-
+                    @if((page.getLastCheck().stream().anyMatch(check -> check.getUrlId() != null && check.getUrlId() == url.getId())))
+                        <td>
+                            ${page.getLastCheck().stream().filter(check -> check.getUrlId() == url.getId()).findFirst().get().getCreatedAt().toString().substring(0,16)}
+                        </td>
+                        <td>
+                            ${page.getLastCheck().stream().filter(check -> check.getUrlId() == url.getId()).findFirst().get().getStatusCode()}
+                        </td>
+                    @else
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    @endif
                 </tr>
             @endfor
             </tbody>
