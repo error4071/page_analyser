@@ -68,7 +68,7 @@ public class UrlController {
         ctx.redirect("/urls");
     }
 
-    public static void showUrls (Context ctx) throws SQLException {
+    public static void showUrls(Context ctx) throws SQLException {
         var urls = UrlRepository.getEntities();
         var pageNumber = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
         var per = 10;
