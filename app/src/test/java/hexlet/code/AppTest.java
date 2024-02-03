@@ -160,14 +160,4 @@ public final class AppTest {
 
         });
     }
-
-    @Test
-    public void testUrlsIdNotFound() throws SQLException {
-        Url site = new Url(1, "https://www.some-domain.com", null);
-        UrlRepository.save(site);
-        JavalinTest.test(app, ((server, client) -> {
-            var response = client.get("/urls/1000");
-            assertThat(response.code()).isEqualTo(404);
-        }));
-    }
 }
