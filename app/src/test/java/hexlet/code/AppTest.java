@@ -25,7 +25,6 @@ public final class AppTest {
 
     private static MockWebServer mockWebServer;
     private static Javalin app;
-
     private static String readResourceFile(String fileName) throws IOException {
         var inputStream = App.class.getClassLoader()
                 .getResourceAsStream(fileName);
@@ -69,8 +68,9 @@ public final class AppTest {
     }
 
     @Test
-    public void testUrlsPage() {
+    public void testUrlsPage() throws Exception {
         var url = new Url("url=https://www.some-domain.com");
+        UrlRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
