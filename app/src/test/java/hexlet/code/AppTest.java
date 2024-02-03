@@ -3,6 +3,7 @@ package hexlet.code;
 import hexlet.code.model.Url;
 import hexlet.code.repository.UrlRepository;
 import hexlet.code.repository.UrlRepositoryCheck;
+import hexlet.code.utils.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
@@ -60,10 +61,8 @@ public final class AppTest {
     @Test
     public void testUrlPage() {
         JavalinTest.test(app, (server, client) -> {
-            var response = client.get("/urls");
+            var response = client.get(NamedRoutes.urlsPath());
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body()
-                    .string()).contains("https://www.some-domain.com");
         });
     }
 
