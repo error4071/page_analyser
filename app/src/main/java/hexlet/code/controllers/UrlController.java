@@ -117,7 +117,7 @@ public class UrlController {
                 ? "active" : "disabled";
         String conditionBack = pageNumber > 1 ? "active" : "disabled";
 
-        var page = new UrlPage(url, pageNumber, urlChecks, conditionNext, conditionBack);
+        var page = new UrlPage(url);
         page.setFlash(ctx.consumeSessionAttribute("flash"));
         page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
         ctx.render("urls/show.jte", Collections.singletonMap("page", page));
