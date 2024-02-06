@@ -133,11 +133,11 @@ public class UrlController {
 
             ctx.sessionAttribute("flash", "Страница успешно проверена");
             ctx.sessionAttribute("flash-type", "success");
-            ctx.redirect(NamedRoutes.urlPath(id));
+            ctx.redirect(NamedRoutes.urlPath(String.valueOf(id)));
         } catch (Exception e) {
             ctx.sessionAttribute("flash", "Неверный URL");
             ctx.sessionAttribute("flash-type", "danger");
-            ctx.redirect(NamedRoutes.urlPath(id));
+            ctx.redirect(NamedRoutes.urlPath(String.valueOf(id)));
         }
     }
 }
