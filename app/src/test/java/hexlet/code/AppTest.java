@@ -157,7 +157,7 @@ public final class AppTest {
 
     @Test
     public void testCreateCheck() throws Exception {
-        String urlForCheck = mockWebServer.url("http://www.example.com").toString();
+        String urlForCheck = mockWebServer.url("http://www.some-domain.com").toString();
 
         var url = new Url(urlForCheck);
         UrlRepository.save(url);
