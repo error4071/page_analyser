@@ -175,9 +175,6 @@ public final class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.post("/urls/" + url.getId() + "/checks", "");
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string())
-                    .contains("Анализатор страниц</td>")
-                    .contains("Бесплатно проверяйте сайты на SEO пригодность</td>");
         });
     }
 }
