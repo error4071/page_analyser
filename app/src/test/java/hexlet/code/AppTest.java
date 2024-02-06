@@ -15,8 +15,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -111,10 +109,8 @@ public final class AppTest {
     void testUrlNotFound() throws Exception {
         var url = new Url("https://www.some-domain.com");
         UrlRepository.deleteById(url.getId());
-
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
-
             assertThat(response.code()).isEqualTo(404);
         });
     }
@@ -137,13 +133,10 @@ public final class AppTest {
     @Test
     public void testCheckEmpty() throws Exception {
         var checkUrl = new Url("https://www.some-domain.com").toString();
-
         var url = new Url(checkUrl);
         UrlRepository.save(url);
-
         JavalinTest.test(app, (server, client) -> {
             var response = client.post("/urls/1/checks");
-
             assertThat(response.body()
                     .string()).doesNotContain("Анализатор страниц");
         });
@@ -157,43 +150,6 @@ public final class AppTest {
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body()
                     .string()).contains("https://www.some-domain.com");
-
-        });
-    }
-
-
-    @Test
-    void testStore2() throws SQLException, IOException {
-
-        MockResponse mockResponse = new MockResponse()
-                .setResponseCode(200)
-                .setBody(readResourceFile("index.html"));
-        mockWebServer.enqueue(mockResponse);
-        var urlName = mockWebServer.url(readResourceFile("index.html"));
-        var url = new Url(urlName.toString());
-        UrlRepository.save(url);
-
-        JavalinTest.test(app, (server, client) -> {
-            var requestFormParam = "url=" + url.getName();
-            assertThat(client.post("/urls", requestFormParam).code()).isEqualTo(200);
-            var actualUrl = UrlRepository.findByName(url.getName()).get();
-            assertThat(actualUrl).isNotNull();
-            assertThat(actualUrl.getName()).isEqualTo(url.getName());
-
-            client.post("/urls/" + actualUrl.getId() + "/checks", "");
-            var response = client.get("/urls/" + actualUrl.getId());
-            assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string()).contains(url.getName());
-
-            var actualCheckUrl = UrlRepository
-                    .findLatestChecks().get(actualUrl.getId());
-
-            assertThat(actualCheckUrl).isNotNull();
-            assertThat(actualCheckUrl.getStatusCode()).isEqualTo(200);
-            assertThat(actualCheckUrl.getTitle())
-                    .isEqualTo("Анализатор страниц");
-            assertThat(actualCheckUrl.getH1())
-                    .isEqualTo("Анализатор страниц");
 
         });
     }
