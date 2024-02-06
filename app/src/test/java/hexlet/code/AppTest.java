@@ -16,6 +16,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -156,6 +158,26 @@ public final class AppTest {
             assertThat(response.body()
                     .string()).contains("https://www.some-domain.com");
 
+        });
+    }
+
+    @Test
+    public void testParsingResponse() throws SQLException, IOException {
+        MockResponse mockResponse = new MockResponse()
+                .setResponseCode(200)
+                .setBody(Files.readString(Paths.get("./src/test/resources/index.html")));
+
+        mockWebServer.enqueue(mockResponse);
+        var urlName = mockWebServer.url("/testParsingResponse");
+        var url = new Url(urlName.toString());
+        UrlRepository.save(url);
+
+        JavalinTest.test(app, (server, client) -> {
+            var response = client.post("/urls/" + url.getId() + "/checks", "");
+            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string())
+                    .contains("Анализатор страниц</td>")
+                    .contains("Бесплатно проверяйте сайты на SEO пригодность</td>");
         });
     }
 }
