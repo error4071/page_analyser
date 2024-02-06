@@ -74,7 +74,7 @@ public final class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
             assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string().contains("https://www.some-domain.com");
+            assertThat(response.body().string()).contains("https://www.some-domain.com");
         });
     }
 
