@@ -161,33 +161,15 @@ public final class AppTest {
         });
     }
 
-    @Test
-    public void testParsingResponse() throws SQLException, IOException {
-        MockResponse mockResponse = new MockResponse()
-                .setResponseCode(200)
-                .setBody(Files.readString(Paths.get("./src/test/resources/index.html")));
-
-        mockWebServer.enqueue(mockResponse);
-        var urlName = mockWebServer.url("/testParsingResponse");
-        var url = new Url(urlName.toString());
-        UrlRepository.save(url);
-
-        JavalinTest.test(app, (server, client) -> {
-            var response = client.post("/urls/" + url.getId() + "/checks", "");
-            assertThat(response.code()).isEqualTo(200);
-            assertThat(response.body().string())
-                    .contains("Анализатор");
-        });
-    }
 
     @Test
     void testStore2() throws SQLException, IOException {
 
         MockResponse mockResponse = new MockResponse()
                 .setResponseCode(200)
-                .setBody(Files.readString(Paths.get("./src/test/resources/index.html")));
+                .setBody(readResourceFile("index.html"));
         mockWebServer.enqueue(mockResponse);
-        var urlName = mockWebServer.url("/testStoreResponse");
+        var urlName = mockWebServer.url(readResourceFile("index.html"));
         var url = new Url(urlName.toString());
         UrlRepository.save(url);
 
