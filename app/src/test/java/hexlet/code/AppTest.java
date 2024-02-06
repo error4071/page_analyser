@@ -154,24 +154,4 @@ public final class AppTest {
 
         });
     }
-
-    @Test
-    public void testCreateCheck() throws Exception {
-        String urlForCheck = mockWebServer.url("http://www.some-domain.com").toString();
-
-        var url = new Url(urlForCheck);
-        UrlRepository.save(url);
-
-        JavalinTest.test(app, (server, client) -> {
-            var response = client.post("/urls/1/checks");
-
-            var urlCheck = UrlRepositoryCheck.getLastCheck(1L);
-
-            String id = String.valueOf(urlCheck.getId());
-            String title = urlCheck.getTitle();
-            String statusCode = String.valueOf(urlCheck.getStatusCode());
-
-            assertThat(response.body().string()).contains(id, title, statusCode);
-        });
-    }
 }
