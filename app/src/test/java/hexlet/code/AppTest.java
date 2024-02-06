@@ -25,7 +25,7 @@ public final class AppTest {
 
     private static MockWebServer mockWebServer;
     private static Javalin app;
-    private static String mockUrl;
+
     private static String readResourceFile(String fileName) throws IOException {
         var inputStream = App.class.getClassLoader()
                 .getResourceAsStream(fileName);
@@ -74,6 +74,7 @@ public final class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
             assertThat(response.code()).isEqualTo(200);
+            assertThat(response.body().string().contains("https://www.some-domain.com");
         });
     }
 
