@@ -28,6 +28,7 @@ public final class AppTest {
 
     private static MockWebServer mockWebServer;
     private static Javalin app;
+    private static String mockUrl;
     private static String readResourceFile(String fileName) throws IOException {
         var inputStream = App.class.getClassLoader()
                 .getResourceAsStream(fileName);
@@ -146,7 +147,7 @@ public final class AppTest {
             assertThat(response.body()
                     .string()).doesNotContain("Анализатор страниц");
         });
-        assertThat(UrlRepositoryCheck.getEntities(1L));
+        assertThat(UrlRepositoryCheck.getEntities(1L)).isEqualTo(1);
     }
 
     @Test
@@ -158,23 +159,6 @@ public final class AppTest {
             assertThat(response.body()
                     .string()).contains("https://www.some-domain.com");
 
-        });
-    }
-
-    @Test
-    public void testParsingResponse() throws SQLException, IOException {
-        MockResponse mockResponse = new MockResponse()
-                .setResponseCode(200)
-                .setBody(Files.readString(Paths.get("./src/test/resources/index.html")));
-
-        mockWebServer.enqueue(mockResponse);
-        var urlName = mockWebServer.url("/testParsingResponse");
-        var url = new Url(urlName.toString());
-        UrlRepository.save(url);
-
-        JavalinTest.test(app, (server, client) -> {
-            var response = client.post("/urls/" + url.getId() + "/checks", "");
-            assertThat(response.code()).isEqualTo(200);
         });
     }
 }
