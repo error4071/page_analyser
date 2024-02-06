@@ -115,6 +115,7 @@ public class UrlRepository extends BaseRepository {
             return result;
         }
     }
+
     public static long deleteById(long id) throws Exception {
         var sql = "DELETE FROM urls WHERE id = ?";
         try (var conn = dataSource.getConnection();
