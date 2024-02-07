@@ -25,8 +25,7 @@ public final class AppTest {
 
     private static MockWebServer mockWebServer;
     private static Javalin app;
-    private static String mockUrl;
-    
+
     private static String readResourceFile(String fileName) throws IOException {
         var inputStream = App.class.getClassLoader()
                 .getResourceAsStream(fileName);
