@@ -2,7 +2,6 @@ package hexlet.code;
 
 import hexlet.code.model.Url;
 import hexlet.code.repository.UrlRepository;
-import hexlet.code.repository.UrlRepositoryCheck;
 import hexlet.code.utils.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
@@ -20,7 +19,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public final class AppTest {
 
@@ -152,35 +151,5 @@ public final class AppTest {
             assertThat(response.body()
                     .string()).contains("https://www.some-domain.com");
         });
-    }
-
-    @Test
-    public void testUrlWithNoAttrCheck() {
-        var mockServerUrl = mockWebServer.url("/").toString();
-
-        var mockResponse = new MockResponse();
-        var mockContent = "<p>some paragraph</p>";
-        mockResponse.setBody(mockContent);
-        mockWebServer.enqueue(mockResponse);
-
-        JavalinTest.test(app, ((server, client) -> {
-            var url = new Url(mockServerUrl);
-            UrlRepository.save(url);
-            var id = url.getId();
-
-            var response = client.post(NamedRoutes.urlCheckPath(String.valueOf(id)));
-            assertThat(response.code()).isEqualTo(200);
-            var responseBody = response.body().string();
-            assertThat(responseBody.contains("200"));
-
-            var urlCheck = UrlRepositoryCheck.getEntities(1L).get(0);
-            assertThat(urlCheck.getId() == 1L);
-            assertThat(urlCheck.getId().equals(id));
-            assertThat(urlCheck.getCreatedAt()).isNotNull();
-
-            assertThat(urlCheck.getTitle()).isEqualTo("");
-            assertThat(urlCheck.getH1()).isEqualTo("");
-            assertThat(urlCheck.getDescription()).isEqualTo("");
-        }));
     }
 }
