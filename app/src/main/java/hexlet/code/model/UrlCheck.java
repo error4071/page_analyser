@@ -21,4 +21,6 @@ public class UrlCheck {
 
     public UrlCheck() {
     }
+    public void setUrlId(long urlId) {
+    }
 }

@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class UrlController {
@@ -69,29 +70,13 @@ public class UrlController {
     }
 
     public static void showUrls(Context ctx) throws SQLException {
-        var urls = UrlRepository.getEntities();
-        var pageNumber = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
-        var per = 10;
-        var firstPost = (pageNumber - 1) * per;
-
-        List<Url> pagedUrls = urls.stream()
-                .skip(firstPost)
-                .limit(per)
-                .collect(Collectors.toList());
-
-        pagedUrls.forEach(url -> {
-            try {
-                url.setLastCheck(UrlRepositoryCheck.getLastCheck(url.getId()));
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        var page = new UrlsPage(pagedUrls, pageNumber);
+        List<Url> urls = UrlRepository.getEntities();
+        Map<Long, UrlCheck> urlChecks = UrlRepositoryCheck.findLatestChecks();
+        var page = new UrlsPage(urls, urlChecks.size());
         page.setFlash(ctx.consumeSessionAttribute("flash"));
         page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
         ctx.render("urls/index.jte", Collections.singletonMap("page", page));
-    }
+    };
 
     public static void showUrl(Context ctx) throws SQLException {
         var id = ctx.pathParamAsClass("id", Long.class).get();
