@@ -21,8 +21,15 @@ import java.util.stream.Collectors;
 
 public final class App {
 
-    private static String getDatabaseUrl() {
-        return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:hexlet_project;DB_CLOSE_DELAY=-1");
+    private static final String JDBC_DATA_H2 = "jdbc:h2:mem:project";
+    static String jdbcUrlCurrent = getDatabaseUrl();
+
+    public static String getDatabaseUrl() {
+        String jdbcUrl = System.getenv("JDBC_DATABASE_URL");
+        if (jdbcUrl == null || jdbcUrl.isEmpty()) {
+            jdbcUrl = JDBC_DATA_H2;
+        }
+        return jdbcUrl;
     }
 
     private static String getMode() {
@@ -51,7 +58,7 @@ public final class App {
         JavalinJte.init(createTemplateEngine());
 
         var hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(getDatabaseUrl());
+        hikariConfig.setJdbcUrl(jdbcUrlCurrent);
         if (isProduction()) {
             String username = System.getenv("JDBC_DATABASE_USERNAME");
             hikariConfig.setUsername(username);
