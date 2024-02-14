@@ -21,35 +21,28 @@ import java.util.stream.Collectors;
 
 public final class App {
 
-    private static final String JDBC_DATA_H2 = "jdbc:h2:mem:project";
-    static String jdbcUrlCurrent = getDatabaseUrl();
-
     public static String getDatabaseUrl() {
-        String jdbcUrl = System.getenv("JDBC_DATABASE_URL");
-        if (jdbcUrl == null || jdbcUrl.isEmpty()) {
-            jdbcUrl = JDBC_DATA_H2;
-        }
-        return jdbcUrl;
+        return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project");
     }
 
-    private static String getMode() {
+    public static String getMode() {
         return System.getenv().getOrDefault("APP_ENV", "development");
     }
 
-    private static boolean isProduction() {
+    public static boolean isProduction() {
         return getMode().equals("production");
     }
 
-    private static String readResourceFile(String fileName) throws IOException {
+    public static String readResourceFile(String fileName) throws IOException {
         var inputStream = App.class.getClassLoader().getResourceAsStream(fileName);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining("\n"));
         }
     }
 
-    private static int getPort() {
+    public static int getPort() {
         String port = System.getenv()
-                .getOrDefault("PORT", "7070");
+                .getOrDefault("PORT", "5432");
         return Integer.valueOf(port);
     }
 
@@ -58,7 +51,7 @@ public final class App {
         JavalinJte.init(createTemplateEngine());
 
         var hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(jdbcUrlCurrent);
+        hikariConfig.setJdbcUrl(getDatabaseUrl());
         if (isProduction()) {
             String username = System.getenv("JDBC_DATABASE_USERNAME");
             hikariConfig.setUsername(username);
@@ -95,7 +88,7 @@ public final class App {
         return app;
     }
 
-    private static TemplateEngine createTemplateEngine() {
+    public static TemplateEngine createTemplateEngine() {
         ClassLoader classLoader = App.class.getClassLoader();
         ResourceCodeResolver codeResolver = new ResourceCodeResolver("jte", classLoader);
         return TemplateEngine.create(codeResolver, ContentType.Html);
