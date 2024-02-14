@@ -21,10 +21,10 @@ import java.util.stream.Collectors;
 
 public final class App {
 
-    private static String JDBC_DATABASE_URL = "jdbc:postgres://dpg-cn6hbjacn0vc73dddbug-a:5432/new_project_flev";
+    private static String DATABASE = "JDBC_DATABASE_URL=jdbc:postgres://dpg-cn6hbjacn0vc73dddbug-a:5432/new_project_flev";
 
     private static String getDatabaseUrl() {
-        return System.getenv().getOrDefault(JDBC_DATABASE_URL, "jdbc:h2:mem:project");
+        return System.getenv().getOrDefault(DATABASE, "jdbc:h2:mem:project");
     }
 
     private static String getMode() {
