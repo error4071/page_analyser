@@ -21,26 +21,28 @@ import java.util.stream.Collectors;
 
 public final class App {
 
-    public static String getDatabaseUrl() {
-        return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project");
+    private static String JDBC_DATABASE_URL = "jdbc:postgres://dpg-cn6hbjacn0vc73dddbug-a:5432/new_project_flev";
+
+    private static String getDatabaseUrl() {
+        return System.getenv().getOrDefault(JDBC_DATABASE_URL, "jdbc:h2:mem:project");
     }
 
-    public static String getMode() {
+    private static String getMode() {
         return System.getenv().getOrDefault("APP_ENV", "development");
     }
 
-    public static boolean isProduction() {
+    private static boolean isProduction() {
         return getMode().equals("production");
     }
 
-    public static String readResourceFile(String fileName) throws IOException {
+    private static String readResourceFile(String fileName) throws IOException {
         var inputStream = App.class.getClassLoader().getResourceAsStream(fileName);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining("\n"));
         }
     }
 
-    public static int getPort() {
+    private static int getPort() {
         String port = System.getenv()
                 .getOrDefault("PORT", "5432");
         return Integer.valueOf(port);
@@ -88,7 +90,7 @@ public final class App {
         return app;
     }
 
-    public static TemplateEngine createTemplateEngine() {
+    private static TemplateEngine createTemplateEngine() {
         ClassLoader classLoader = App.class.getClassLoader();
         ResourceCodeResolver codeResolver = new ResourceCodeResolver("jte", classLoader);
         return TemplateEngine.create(codeResolver, ContentType.Html);
