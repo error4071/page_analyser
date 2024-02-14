@@ -42,7 +42,7 @@ public final class App {
 
     private static int getPort() {
         String port = System.getenv()
-                .getOrDefault("PORT", "5432");
+                .getOrDefault("PORT", "7070");
         return Integer.valueOf(port);
     }
 
