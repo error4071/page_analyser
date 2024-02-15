@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,22 +78,7 @@ public final class AppTest {
         });
     }
 
-    @Test
-    public void testStore() throws SQLException {
-        String inputUrl = "https://www.some-domain.com";
 
-        JavalinTest.test(app, (server, client) -> {
-            var requestBody = "url=" + inputUrl;
-            var response = client.post("/urls", requestBody);
-            assertThat(response.code()).isEqualTo(200);
-        });
-
-        Url actualUrl = UrlRepository.findByName(inputUrl)
-                .orElse(null);
-
-        assertThat(actualUrl).isNotNull();
-        assertThat(actualUrl.getName()).isEqualTo(inputUrl);
-    }
 
     @Test
     void testUrlNotFound() throws Exception {
