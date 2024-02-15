@@ -45,10 +45,10 @@ public final class AppTest {
         mockWebServer.start();
     }
 
-    @BeforeEach
-    public void setUp() throws SQLException, IOException {
-        app = App.getApp();
-    }
+//    @BeforeEach
+//    public void setUp() throws SQLException, IOException {
+//        app = App.getApp();
+//    }
 
     @Test
     public void testMainPage() {
