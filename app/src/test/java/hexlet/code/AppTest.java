@@ -88,11 +88,6 @@ public final class AppTest {
             assertThat(response.code()).isEqualTo(200);
         });
 
-        List<Url> all = UrlRepository.getEntities();
-        for (Url url : all) {
-            System.out.println(url);
-        }
-
         Url actualUrl = UrlRepository.findByName(inputUrl)
                 .orElse(null);
 
