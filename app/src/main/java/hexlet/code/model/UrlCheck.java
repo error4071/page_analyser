@@ -18,9 +18,4 @@ public class UrlCheck {
     private String description;
     private Long id;
     private Timestamp createdAt;
-
-    public UrlCheck() {
-    }
-    public void setUrlId(long urlId) {
-    }
 }
