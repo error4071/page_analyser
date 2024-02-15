@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public final class App {
     private static String getDatabaseUrl() {
-        return System.getenv().getOrDefault("", "jdbc:h2:mem:project");}
+        return System.getenv().getOrDefault("", "jdbc:h2:mem:project"); }
 
     private static String getMode() {
         return System.getenv().getOrDefault("APP_ENV", "development");
