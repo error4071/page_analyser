@@ -19,6 +19,12 @@ compileJava {
     options.encoding = 'UTF-8'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(20)
+    }
+}
+
 application {
     mainClass = 'hexlet.code.App'
 }
