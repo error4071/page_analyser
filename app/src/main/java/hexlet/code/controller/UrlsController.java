@@ -25,8 +25,9 @@ import org.jsoup.nodes.Element;
 public final class UrlsController {
 
     public static void listUrls(Context ctx) throws SQLException {
-        //TODO:
-        //UrlsPage page;
+        List<Url> urls = UrlsRepository.getEntities();
+        Map<Long, UrlCheck> urlChecks = UrlChecksRepository.findLatestChecks();
+        UrlsPage page = new UrlsPage(urls, urlChecks);
 
         page.setFlash(ctx.consumeSessionAttribute("flash"));
         page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
@@ -75,8 +76,9 @@ public final class UrlsController {
     public static void showUrl(Context ctx) throws SQLException {
         long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
 
-        //TODO:
-        //UrlPage page;
+        List<Url> urls = UrlsRepository.getEntities();
+        Map<Long, UrlCheck> urlChecks = UrlChecksRepository.findLatestChecks();
+        UrlsPage page = new UrlsPage(urls, urlChecks);
 
         page.setFlash(ctx.consumeSessionAttribute("flash"));
         page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
