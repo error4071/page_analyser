@@ -91,12 +91,12 @@ public final class AppTest {
         });
         System.out.println("Read all urls from DB");
 
-        List<Url> all = UrlRepository.getEntities();
+        List<Url> all = UrlsRepository.getEntities();
         for (Url url : all) {
             System.out.println(url);
         }
 
-        Url actualUrl = UrlRepository.findByName(inputUrl)
+        Url actualUrl = UrlsRepository.findByName(inputUrl)
                 .orElse(null);
 
         System.out.println("actualUrl found by name:" + actualUrl);
