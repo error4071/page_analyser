@@ -27,7 +27,7 @@ public final class UrlsController {
     public static void listUrls(Context ctx) throws SQLException {
         List<Url> urls = UrlsRepository.getEntities();
         Map<Long, UrlCheck> urlChecks = UrlChecksRepository.findLatestChecks();
-        UrlsPage page = new UrlsPage(urls, urlChecks);
+        var page = new UrlsPage(urls, urlChecks);
 
         page.setFlash(ctx.consumeSessionAttribute("flash"));
         page.setFlashType(ctx.consumeSessionAttribute("flash-type"));
@@ -76,9 +76,13 @@ public final class UrlsController {
     public static void showUrl(Context ctx) throws SQLException {
         long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
 
-        List<Url> urls = UrlsRepository.getEntities();
-        Map<Long, UrlCheck> urlChecks = UrlChecksRepository.findLatestChecks();
-        UrlsPage page = new UrlsPage(urls, urlChecks);
+        var url = UrlsRepository.find(id)
+                .orElseThrow(() -> new NotFoundResponse("Url" + id + "not found"));
+
+        var urlChecks = UrlChecksRepository.findByUrlId(id);
+        url.setUrlChecks(urlChecks);
+
+        var page = new UrlPage(url, urlChecks);
 
         page.setFlash(ctx.consumeSessionAttribute("flash"));
         page.setFlashType(ctx.consumeSessionAttribute("flash-type"));

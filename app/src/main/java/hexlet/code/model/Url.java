@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 
 @Getter
@@ -20,5 +21,8 @@ public final class Url {
 
     public Url(String name) {
         this.name = name;
+    }
+
+    public void setUrlChecks(List<UrlCheck> urlChecks) {
     }
 }
