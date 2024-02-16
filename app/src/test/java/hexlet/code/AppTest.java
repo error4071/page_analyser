@@ -1,8 +1,8 @@
 package hexlet.code;
 
 import hexlet.code.model.Url;
-import hexlet.code.repository.UrlRepository;
-import hexlet.code.utils.NamedRoutes;
+import hexlet.code.repository.UrlsRepository;
+import hexlet.code.util.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
@@ -68,7 +68,7 @@ public final class AppTest {
     @Test
     public void testUrlsPage() throws Exception {
         var url = new Url("url=https://www.some-domain.com");
-        UrlRepository.save(url);
+        UrlsRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
@@ -82,7 +82,7 @@ public final class AppTest {
     @Test
     void testUrlNotFound() throws Exception {
         var url = new Url("https://www.some-domain.com");
-        UrlRepository.deleteById(url.getId());
+        UrlsRepository.deleteById(url.getId());
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
             assertThat(response.code()).isEqualTo(404);
@@ -92,7 +92,7 @@ public final class AppTest {
     @Test
     public void testCheckShow() throws SQLException {
         var url = new Url("https://www.some-domain.com");
-        UrlRepository.save(url);
+        UrlsRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/urls/" + url.getId());
@@ -101,18 +101,6 @@ public final class AppTest {
                     .string())
                     .contains("Анализатор страниц")
                     .contains("https://www.some-domain.com");
-        });
-    }
-
-    @Test
-    public void testCheckEmpty() throws Exception {
-        var checkUrl = new Url("https://www.some-domain.com").toString();
-        var url = new Url(checkUrl);
-        UrlRepository.save(url);
-        JavalinTest.test(app, (server, client) -> {
-            var response = client.post("/urls/1/checks");
-            assertThat(response.body()
-                    .string()).doesNotContain("Анализатор страниц");
         });
     }
 

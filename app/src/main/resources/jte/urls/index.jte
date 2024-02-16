@@ -1,71 +1,47 @@
-@import hexlet.code.dto.urls.UrlsPage
-@import hexlet.code.utils.NamedRoutes
+@import hexlet.code.dto.UrlsPage
+@import hexlet.code.util.NamedRoutes
 @import java.time.format.DateTimeFormatter
-
 @param UrlsPage page
 
+!{var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");}
 
 @template.layout.page(
-page = page,
-content = @`
-    <div class="container-lg mt-5">
+    page = page,
+    content = @`
+        <div class="container-lg mt-5">
+            <h1>Сайты</h1>
 
-        <h1>Сайты</h1>
-
-        <table class="table table-bordered table-hover mt-3">
-            <thead>
-            <tr>
-                <th class="col-1">ID</th>
-                <th>Имя</th>
-                <th class="col-2">Последняя проверка</th>
-                <th class="col-1">Код ответа</th>
-            </tr>
-            </thead>
-            <tbody>
-            @for(var url : page.getUrls())
+            <table class="table table-bordered table-hover mt-3">
+                <thead>
                 <tr>
-                    <td>
-                        ${url.getId()}
-                    </td>
-                    <td>
-                        <a href="/urls/${url.getId()}">${url.getName()}</a>
-                    </td>
-                    @if((url.getLastCheck() != null) && (url.getLastCheck().getCreatedAt() != null))
-                        <td>
-                            ${url.getLastCheck().getCreatedAt().toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}
-                        </td>
-                        <td>
-                            ${url.getLastCheck().getStatusCode()}
-                        </td>
-                    @else
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                    @endif
+                    <th class="col-1">ID</th>
+                    <th>Имя</th>
+                    <th class="col-2">Последняя проверка</th>
+                    <th class="col-1">Код ответа</th>
                 </tr>
-            @endfor
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @for(var url : page.getUrls())
+                        !{var urlCheck = page.getLatestChecks().get(url.getId());}
 
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center mt-5">
-                <li class="page-item">
-                    <a class="page-link" href="?page=${page.getPageNumber() < 2 ? 1 : page.getPageNumber() - 1}"
-                       aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link"
-                                         href="${NamedRoutes.urlsPath()}?page=${page.getPageNumber()}">${page.getPageNumber()}</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page=${page.getPageNumber() + 1}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-`
+                        <tr>
+                            <td>
+                                ${url.getId()}
+                            </td>
+                            <td>
+                                <a href="${NamedRoutes.urlPath(url.getId())}">${url.getName()}</a>
+                            </td>
+                            <td>
+                                ${urlCheck == null ? "" : urlCheck.getCreatedAt().toLocalDateTime().format(formatter)}
+                            </td>
+                            <td>
+                                ${urlCheck == null ? "" : String.valueOf(urlCheck.getStatusCode())}
+                            </td>
+
+                        </tr>
+                    @endfor
+                </tbody>
+            </table>
+        </div>
+    `
 )
