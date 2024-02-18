@@ -29,15 +29,13 @@ public final class App {
     }
 
     private static String getDatabaseUrl() {
-        return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project;");
+        return System.getenv().getOrDefault("", "jdbc:h2:mem:project;");
     }
 
     public static Javalin getApp() throws IOException, SQLException {
 
         var hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(getDatabaseUrl());
-        hikariConfig.setUsername(System.getenv("JDBС_DATABASE_USERNAME"));
-        hikariConfig.setPassword(System.getenv("JDBC_DATABASE_PASSWORD"));
         hikariConfig.setMinimumIdle(1);
         hikariConfig.setMaximumPoolSize(1);
 
