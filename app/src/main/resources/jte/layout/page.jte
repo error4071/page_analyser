@@ -51,7 +51,7 @@
             <div class="container-xl">
                 <div class="text-center">
                     created by
-                    <a href="https://ru.hexlet.io" target="_blank">Hexlet</a>
+                    <a href="error4071" target="_blank">Hexlet</a>
                 </div>
             </div>
         </footer>
