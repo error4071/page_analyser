@@ -36,6 +36,7 @@ public final class App {
 
         var hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(getDatabaseUrl());
+        hikariConfig.setUsername(System.getenv("JDBС_DATABASE_USERNAME"));
         hikariConfig.setPassword(System.getenv("JDBC_DATABASE_PASSWORD"));
         hikariConfig.setMinimumIdle(1);
         hikariConfig.setMaximumPoolSize(1);
