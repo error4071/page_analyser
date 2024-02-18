@@ -33,7 +33,7 @@ public final class App {
     }
 
     public static String getJdbcPassword() {
-        return System.getenv().getOrDefault("JDBC_DATABASE_PASSWORD", "DEFAULT_JDBC_PASSWORD");
+        return System.getenv().getOrDefault("JDBC_DATABASE_PASSWORD", "JDBC_DATABASE_PASSWORD");
     }
 
     public static Javalin getApp() throws IOException, SQLException {
