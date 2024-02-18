@@ -32,15 +32,11 @@ public final class App {
         return System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project;");
     }
 
-    public static String getJdbcPassword() {
-        return System.getenv().getOrDefault("JDBC_DATABASE_PASSWORD", "JDBC_DATABASE_PASSWORD");
-    }
-
     public static Javalin getApp() throws IOException, SQLException {
 
         var hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(getDatabaseUrl());
-        hikariConfig.setPassword(getJdbcPassword());
+        hikariConfig.setPassword(System.getenv("JDBC_DATABASE_PASSWORD"));
         hikariConfig.setMinimumIdle(1);
         hikariConfig.setMaximumPoolSize(1);
 
