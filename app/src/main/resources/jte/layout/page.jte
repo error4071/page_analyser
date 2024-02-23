@@ -51,7 +51,7 @@
             <div class="container-xl">
                 <div class="text-center">
                     created by
-                    <a href="error4071" target="_blank">Hexlet</a>
+                    <a href="error4071" target="_blank">erro4071</a>
                 </div>
             </div>
         </footer>
